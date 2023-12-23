@@ -1,0 +1,85 @@
+.projectsList {
+    display   : flex;
+    flex-flow : row wrap;
+    width     : 100%;
+    margin-top: 10px;
+}
+
+.project {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+    padding  : 0 15px;
+    margin   : 10px 0;
+}
+
+.projectLogo {
+    background: var(--color-dark-a);
+    width     : 100px;
+    height    : 100px;
+}
+
+.projectBox {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : calc(100% - 100px);
+    height   : 100px;
+    padding  : 0 10px;
+}
+
+.projectName {
+    width      : 100%;
+    height     : 50px;
+    color      : var(--color-light-a);
+    font-size  : 22px;
+    line-height: 40px;
+}
+
+
+.projectOptions {
+    width      : 100%;
+    height     : 50px;
+    display    : flex;
+    flex-flow  : row wrap;
+    align-items: last baseline;
+}
+
+.projectButton {
+    background  : var(--color-dark-a);
+    width       : 100px;
+    height      : 40px;
+    margin-right: 10px;
+    color       : var(--color-light-a);
+    font-size   : 18px;
+    line-height : 40px;
+    text-align  : center;
+}
+
+.noData {
+    width      : 100%;
+    height     : 50px;
+    margin-top : 20px;
+    color      : var(--color-light-a);
+    text-align : center;
+    line-height: 40px;
+}
+
+.projectTechList {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+    padding  : 0 10px;
+    margin   : 10px 0;
+}
+
+.projectTechList>li {
+    background  : var(--color-dark-a);
+    padding     : 0 10px;
+    height      : 40px;
+    margin      : 5px 0;
+    margin-right: 5px;
+    color       : var(--color-light-a);
+    line-height : 40px;
+    font-size   : 18px;
+    cursor: pointer;
+}

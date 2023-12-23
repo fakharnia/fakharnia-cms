@@ -1,0 +1,257 @@
+.container {
+    background: var(--color-dark-c);
+    width     : 100vw;
+    height    : 100vh;
+}
+
+.menu {
+    background: var(--color-dark-a);
+    width     : 250px;
+    height    : 100%;
+}
+
+.menu img {
+    height : 150px;
+    width  : auto;
+    display: block;
+    margin : 10px auto;
+}
+
+.menu>button {
+    background: transparent;
+    display   : block;
+    width     : 40px;
+    height    : 40px;
+    margin    : auto;
+    color     : var(--color-light-a);
+    font-size : 25px;
+}
+
+.menu>ul {
+    padding-top: 10px;
+}
+
+.menu>ul>li {
+    width      : 100%;
+    height     : 50px;
+    margin     : 10px 0;
+    text-align : center;
+    line-height: 50px;
+    font-family: var(--custom-font);
+    font-size  : 25px;
+}
+
+.menu>ul>li>a {
+    color: var(--color-light-a);
+}
+
+.menu>ul>li:hover>a,
+.menu>ul>li.active>a {
+    cursor     : pointer;
+    font-weight: bold;
+    font-style : italic;
+    transition : .1s;
+}
+
+.layout {
+    position  : relative;
+    background: var(--color-dark-b);
+    width     : 700px;
+    height    : 700px;
+    overflow-y: hidden;
+    box-shadow: var(--shadow-a);
+}
+
+.pageContainer {
+    position  : relative;
+    width     : calc(100% - 250px);
+    height    : 100%;
+    overflow-y: auto;
+}
+
+.pageContainer::-webkit-scrollbar {
+    width     : 0;
+    height    : 0;
+    background: transparent;
+}
+
+.pageHeader {
+    background     : var(--color-dark-b);
+    position       : sticky;
+    top            : 0;
+    left           : 0;
+    width          : 100%;
+    display        : flex;
+    padding        : 10px 0;
+    flex-flow      : row wrap;
+    justify-content: space-between;
+    align-items    : center;
+    z-index        : 1;
+}
+
+.pageTitle {
+    height     : 50px;
+    padding    : 0 10px;
+    color      : var(--color-light-a);
+    font-size  : 25px;
+    line-height: 50px;
+}
+
+.pageAddButton,
+.pageReturnButton {
+    background : var(--color-dark-a);
+    width      : 100px;
+    height     : 40px;
+    margin     : 0 10px;
+    color      : var(--color-light-a);
+    text-align : center;
+    line-height: 40px;
+}
+
+
+.loading {
+    position   : absolute;
+    top        : 50%;
+    left       : 250px;
+    width      : calc(100% - 250px);
+    height     : 50px;
+    color      : var(--color-light-a);
+    line-height: 50px;
+    text-align : center;
+    transform  : translateY(-50%);
+}
+
+.chatWidget>h5,
+.postWidget>h5 {
+    height     : 50px;
+    padding    : 10px;
+    color      : var(--color-light-a);
+    font-size  : 25px;
+    line-height: 50px;
+}
+
+.chatWidget>ul,
+.postWidget>ul {
+    padding: 10px;
+}
+
+.chatWidget>ul>li {
+    background: var(--color-dark-a);
+    padding   : 5px 0;
+    margin    : 10px 0;
+}
+
+.chatWidget>ul>li>i {
+    height     : 80px;
+    width      : 80px;
+    color      : var(--color-light-a);
+    font-size  : 40px;
+    line-height: 80px;
+    text-align : center;
+}
+
+.chatWidget>ul>li>div {
+    width: calc(100% - 80px);
+}
+
+.chatWidget>ul>li>div>strong {
+    width      : calc(100% - 100px);
+    height     : 40px;
+    color      : var(--color-light-a);
+    font-size  : 18px;
+    font-weight: bold;
+    line-height: 40px;
+}
+
+.chatWidget>ul>li>div>span {
+    width        : 100px;
+    height       : 40px;
+    padding-right: 10px;
+    color        : var(--color-light-a);
+    font-size    : 14px;
+    line-height  : 40px;
+    text-align   : right;
+}
+
+.chatWidget>ul>li>div>p {
+    width      : calc(100% - 40px);
+    height     : 40px;
+    line-height: 40px;
+    color      : var(--color-light-a);
+}
+
+.chatWidget>ul>li>div>small {
+    width : 40px;
+    height: 40px;
+}
+
+.chatWidget>ul>li>div>small>i {
+    background  : var(--color-light-a);
+    width       : 20px;
+    height      : 20px;
+    margin-right: 10px;
+    color       : var(--color-dark-a);
+    line-height : 20px;
+    text-align  : center;
+}
+
+.postWidget>ul>li {
+    margin-bottom: 20px;
+}
+
+.postWidget>ul>li>div.info {
+    width: calc(100% - 100px);
+}
+
+.postWidget>ul>li>div.info>h5,
+.postWidget>ul>li>div.info>p,
+.postWidget>ul>li>div.info>ul>li {
+    height     : 40px;
+    color      : var(--color-light-a);
+    line-height: 40px;
+}
+
+.postWidget>ul>li>div.info>p {
+    margin-bottom: 10px;
+    font-size    : 14px;
+}
+
+.postWidget>ul>li>div.info>h5 {
+    font-size: 20px;
+}
+
+.postWidget>ul>li>div.info>ul>li {
+    background  : var(--color-dark-a);
+    margin-right: 10px;
+    padding     : 0 5px;
+    color       : var(--color-light-a);
+}
+
+.postWidget>ul>li>div.options {
+    width: 100px;
+}
+
+.postWidget>ul>li>div.options>button {
+    background: var(--color-dark-a);
+    width     : 100%;
+    height    : 40px;
+    margin    : 5px 0;
+    color     : var(--color-light-a);
+}
+
+.chatWidget,
+.postWidget {
+    min-height: calc(100% / 2);
+}
+
+.chatWidget>ul>li.empty,
+.postWidget>ul>li.empty,
+.innerLoading {
+    background : transparent;
+    height     : 40px;
+    line-height: 40px;
+    padding    : 0;
+    text-align : center;
+    color      : var(--color-light-a);
+    font-style : italic;
+}

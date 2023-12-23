@@ -1,0 +1,143 @@
+.form {
+    width         : 100%;
+    flex-flow     : column wrap;
+    padding-bottom: 10px;
+}
+
+.formGroup {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+    padding  : 0 10px;
+    margin   : 10px 0;
+}
+
+.formGroupHasButton {
+    align-items: flex-end;
+}
+
+.formLabel,
+.formLabelError {
+    width      : 100%;
+    height     : 40px;
+    color      : var(--color-light-a);
+    font-size  : 20px;
+    line-height: 40px;
+}
+
+.formLabelError {
+    color: var(--color-red-a);
+}
+
+.formControl {
+    background: var(--color-dark-a);
+    border    : solid 1px var(--color-dark-c);
+    width     : 100%;
+    padding   : 0 5px;
+    min-height: 40px;
+    color     : var(--color-light-a);
+    font-size : 20px;
+}
+
+.formControlError {
+    color         : var(--color-red-a);
+    height        : 25px;
+    /* margin-top : 5px; */
+    font-size     : 18px;
+    font-style    : italic;
+    line-height   : 25px;
+}
+
+.formUpload {
+    display        : flex;
+    flex-flow      : row;
+    justify-content: space-between;
+}
+
+textarea.formControl {
+    height: 120px;
+    resize: vertical;
+}
+
+.markdownPreview {
+    background: var(--color-dark-a);
+    width     : 100%;
+    padding   : 10px;
+}
+
+.markdownPreview * {
+    color: var(--color-light-a);
+}
+
+.formControl:focus {
+    border-color: var(--color-light-a);
+}
+
+.imagePreview {
+    background: var(--color-dark-a);
+    width     : 100px;
+    height    : 100px;
+}
+
+.coverImagePreview {
+    background   : var(--color-dark-a);
+    width        : 100%;
+    height       : 190px;
+    margin-bottom: 10px;
+}
+
+.formControl[type="file"] {
+    display: none;
+}
+
+.innerButton {
+    background : var(--color-dark-a);
+    width      : 100px;
+    height     : 40px;
+    margin     : 0 5px;
+    color      : var(--color-light-a);
+    text-align : center;
+    line-height: 40px;
+    cursor     : pointer;
+}
+
+.formButtons {
+    display   : flex;
+    flex-flow : row wrap;
+    margin-top: 20px;
+}
+
+.submitButton,
+.discardButton,
+.submitInnerButton {
+    background : var(--color-dark-a);
+    width      : 150px;
+    height     : 40px;
+    margin     : 0 10px;
+    color      : var(--color-light-a);
+    text-align : center;
+    font-size  : 18px;
+    line-height: 40px;
+}
+
+.submitInnerButton {
+    width: 100px;
+}
+
+.discardButton {
+    background : transparent;
+    width      : 150px;
+    border     : solid 1px var(--color-dark-a);
+    margin-left: auto;
+}
+
+.formSectionTitle {
+    width      : 100%;
+    height     : 40px;
+    padding    : 0 10px;
+    margin     : 10px 0;
+    color      : var(--color-light-a);
+    font-size  : 22px;
+    line-height: 40px;
+
+}
