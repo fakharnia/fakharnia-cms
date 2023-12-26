@@ -141,3 +141,43 @@ textarea.formControl {
     line-height: 40px;
 
 }
+
+.hide {
+    display: none;
+}
+
+.checkboxLabel {
+    display        : flex;
+    flex-flow      : row wrap;
+    width          : 100%;
+    padding        : 0 5px;
+    margin         : 10px 0;
+    justify-content: space-between;
+}
+
+.checkboxLabel>p {
+    padding-right: 10px;
+    height       : 25px;
+    color        : var(--color-light-a);
+    line-height  : 25px;
+    font-size    : 18px;
+}
+
+.checkboxLabel>i {
+    background: var(--color-light-a);
+    position  : relative;
+    width     : 25px;
+    height    : 25px;
+    border    : solid 1px var(--color-dark-a);
+}
+
+.checkboxLabel>input:checked~i::before {
+    content   : "";
+    background: var(--color-dark-a);
+    position  : absolute;
+    top       : 50%;
+    left      : 50%;
+    width     : 20px;
+    height    : 20px;
+    margin    : -10px -10px;
+}

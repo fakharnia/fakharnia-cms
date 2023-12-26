@@ -18,7 +18,7 @@ export const Form = ({ params }) => {
     const { addMessage, cancel } = useMessage();
     const { changeMenu } = useMenu();
 
-    const [_id, setId] = useState({ value: "", error: "" });
+    const [_id, setId] = useState();
     const [title, setTitle] = useState({ value: "", error: "" });
     const [priority, setPriority] = useState({ value: null, error: "" });
     const [content, setContent] = useState({ value: "", error: "" });
@@ -44,7 +44,7 @@ export const Form = ({ params }) => {
         setContent({ value: response?.content ?? "", error: "" });
         setCoverUrl({ value: response?.coverUrl ?? "", error: "" });
         setCoverAlt(response?.coverAlt ?? "");
-        setPreview(response?.coverUrl ? `${previewURL}/public/service/${response?.coverUrl}` : null);
+        setPreview(response?.coverUrl ? `${previewURL}/public/service/${response?.coverUrl}` : "");
         setSelectedFile("");
         setMode(response?._id ? "edit" : "create");
     }
@@ -91,7 +91,6 @@ export const Form = ({ params }) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
-
         if (formValidation()) {
             const form = new FormData();
             form.append("_id", _id ?? null);
@@ -125,17 +124,17 @@ export const Form = ({ params }) => {
                 </div>
                 <form className={formStyles.form} onSubmit={submitHandler}>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Title</label>
+                        <label className={formStyles.formLabel}>Title *</label>
                         <input type="text" className={formStyles.formControl} value={title.value} onChange={(e) => setTitle({ value: e.target.value, error: "" })} />
                         <small className={formStyles.formControlError}>{title.error}</small>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Priority</label>
+                        <label className={formStyles.formLabel}>Priority *</label>
                         <input type="number" className={formStyles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, error: "" })} />
                         <small className={formStyles.formControlError}>{priority.error}</small>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Content</label>
+                        <label className={formStyles.formLabel}>Content *</label>
                         <textarea className={formStyles.formControl} value={content.value} onChange={(e) => setContent({ value: e.target.value, error: "" })} ></textarea>
                         <small className={formStyles.formControlError}>{content.error}</small>
                     </div>
@@ -146,6 +145,7 @@ export const Form = ({ params }) => {
                         </div>
                     </div>
                     <div className={`${formStyles.formGroup}`}>
+                        <label className={formStyles.formLabel}>Cover *</label>
                         {
                             preview ?
                                 <Image width={200} height={190} className={formStyles.coverImagePreview} src={preview} alt="Preview" />

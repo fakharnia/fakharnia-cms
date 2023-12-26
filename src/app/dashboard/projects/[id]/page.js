@@ -34,7 +34,6 @@ export const ProjectForm = ({ params }) => {
 
     const [logoUrl, setLogoUrl] = useState("");
     const [technologies, setTechnologies] = useState([]);
-    const [deletedTechnologies, setDeletedTechnologies] = useState([]);
     const [preview, setPreview] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
 
@@ -88,9 +87,6 @@ export const ProjectForm = ({ params }) => {
 
     const onRemoveTechnology = (tech) => {
         setTechnologies([...technologies.filter(t => t.name !== tech.name)]);
-        if (tech._id) {
-            setDeletedTechnologies([...deletedTechnologies, tech._id]);
-        }
     }
 
     const formValidation = () => {
@@ -146,7 +142,6 @@ export const ProjectForm = ({ params }) => {
             form.append("logoAlt", logoAlt.value ?? null);
 
             form.append("technologies", JSON.stringify(technologies) ?? []);
-            form.append("deletedTechnologies", JSON.stringify(deletedTechnologies) ?? []);
             form.append("logoUrl", logoUrl ?? null);
             form.append('logo', selectedFile ?? null);
             form.append("logoChanged", selectedFile ? true : false);
