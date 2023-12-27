@@ -1,15 +1,12 @@
 "use client"
 
 import { useState } from "react";
-import Image from "next/image";
 import { signIn } from "next-auth/react"
-
-import styles from "./login.module.css";
-
+import Image from "next/image";
+import componentStyles from "./login.module.css";
 import { useMessage } from "../context/messageContext";
 
 const Login = () => {
-
     const { addMessage, cancel } = useMessage();
 
     const [username, setUsername] = useState("");
@@ -32,7 +29,7 @@ const Login = () => {
     return (
         <>
             <title>Fakharnia CMS / Login</title>
-            <form onSubmit={submitHandler} className={`flex-row flex-align-center flex-justify-around shadow-a ${styles.loginForm}`}>
+            <form onSubmit={submitHandler} className={`flex-row flex-align-center flex-justify-around shadow-a ${componentStyles.loginForm}`}>
                 <Image src="/logo.svg" width={0} height={0} alt="logo" priority={true} />
                 <div className="width-block flex-row flex-justify-around">
                     <label className="width-block flex-row flex-justify-between text-left">Username</label>

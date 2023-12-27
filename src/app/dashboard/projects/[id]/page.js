@@ -4,25 +4,24 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../../page.module.css";
-import stylesPage from "../page.module.css";
-import stylesProject from "../../styles/form.module.css";
-import { getProject } from "@/lib/project.lib";
-import { useMessage } from "@/app/context/messageContext";
+import commonStyles from "../../page.module.css";
+import componentStyles from "../page.module.css";
+import formStyles from "../../styles/form.module.css";
 import { useMenu } from "@/app/context/menuContext";
+import { useDashboardMessage } from "../../context/messageContext";
+import { getProject } from "@/lib/project.lib";
+import { createAction, updateAction } from "../action";
 import { InnerForm } from "./innerForm";
 
-
-import { create, update } from "./action";
-
 export const ProjectForm = ({ params }) => {
-
-    const previewURL = process.env.NEXT_PUBLIC_API;
+    const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
     const router = useRouter();
+
     const { changeMenu } = useMenu();
-    const { addMessage, cancel } = useMessage();
+    const { addMessage, cancel } = useDashboardMessage();
 
     const [innerForm, setInnerForm] = useState(false);
+    const [mode, setMode] = useState("create");
 
     const [_id, setId] = useState({ value: "", errors: [] });
     const [name, setName] = useState({ value: "", errors: [] });
@@ -37,9 +36,6 @@ export const ProjectForm = ({ params }) => {
     const [preview, setPreview] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
 
-    const [mode, setMode] = useState("create");
-
-
     const fetchProject = async () => {
         const response = await getProject(params.id);;
         setMode(response?._id ? "edit" : "create");
@@ -52,9 +48,8 @@ export const ProjectForm = ({ params }) => {
         setTechDescription({ value: response?.techDescription ?? "", errors: [] });
 
         setTechnologies(response?.technologies ?? []);
-        setDeletedTechnologies([]);
         setLogoUrl(response?.logoUrl ?? null);
-        setPreview(response?.logoUrl ? `${previewURL}/public/project/${response?.logoUrl}` : null);
+        setPreview(response?.logoUrl ? `${previewURL}/project/${response?.logoUrl}` : null);
         setSelectedFile(null);
     }
 
@@ -62,16 +57,15 @@ export const ProjectForm = ({ params }) => {
         if (params.id !== "0") {
             fetchProject();
         }
+        changeMenu("/dashboard/designs");
     }, []);
 
-
-
-    const handleTechnologyData = (tech) => {
+    const onInnerFormSubmitted = (tech) => {
         setTechnologies([...technologies, tech]);
         setInnerForm(false);
     }
 
-    const handleFileChange = (event) => {
+    const onFileChanged = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
@@ -84,8 +78,7 @@ export const ProjectForm = ({ params }) => {
         }
     };
 
-
-    const onRemoveTechnology = (tech) => {
+    const onRemovedTechnology = (tech) => {
         setTechnologies([...technologies.filter(t => t.name !== tech.name)]);
     }
 
@@ -106,7 +99,7 @@ export const ProjectForm = ({ params }) => {
         return result;
     }
 
-    const setFormController = (propertyName, value) => {
+    const onChangeController = (propertyName, value) => {
         switch (propertyName) {
             case "name":
                 setName({ value: value, errors: [] });
@@ -129,7 +122,7 @@ export const ProjectForm = ({ params }) => {
         }
     }
 
-    const submitHandler = async (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
         if (formValidation()) {
             const form = new FormData();
@@ -146,87 +139,84 @@ export const ProjectForm = ({ params }) => {
             form.append('logo', selectedFile ?? null);
             form.append("logoChanged", selectedFile ? true : false);
 
-            let requestResult;
-            if (mode === "edit") {
-                requestResult = await update(form);
+            try {
+                const result = mode === "create" ? await createAction(form) : await updateAction(form);
 
-            } else {
-                requestResult = await create(form);
-            }
-
-            if (requestResult !== undefined) {
-                addMessage({ text: "Service Successfully Created", okText: "OK", ok: cancel });
-                changeMenu("/dashboard/projects");
-                router.push("/dashboard/projects");
-            } else {
-                addMessage({ text: "Operation Failed!", okText: "OK", ok: cancel });
+                if (result !== undefined) {
+                    addMessage({ text: "Service Successfully Created", cancel: cancel, type: "message" });
+                    changeMenu("/dashboard/projects");
+                    router.push("/dashboard/projects");
+                } else {
+                    addMessage({ text: "Operation Failed!", cancel: cancel, type: "error" });
+                }
+            } catch (error) {
+                addMessage({ text: "Connection to server failed!", type: "error", cancel: cancel });
             }
         }
     }
 
-
     return (
         <>
             <title>Fakharnai CM | Projects/{mode === 'edit' ? 'Edit' : 'Define'}</title>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h5 className={styles.pageTitle}>{mode === 'edit' ? 'Edit' : 'Define'} Project</h5>
-                    <Link className={styles.pageAddButton} href="/dashboard/projects">Back</Link>
+            <div className={commonStyles.pageContainer}>
+                <div className={commonStyles.pageHeader}>
+                    <h5 className={commonStyles.pageTitle}>{mode === 'edit' ? 'Edit' : 'Define'} Project</h5>
+                    <Link className={commonStyles.pageAddButton} href="/dashboard/projects">Back</Link>
                 </div>
-                <form className={stylesProject.form} onSubmit={submitHandler}>
-                    <div className={stylesProject.formGroup}>
-                        <label className={name.errors.length > 0 ? stylesProject.formLabelError : stylesProject.formLabel}>Name *</label>
-                        <input type="text" className={stylesProject.formControl} value={name.value} onChange={(e) => setFormController("name", e.target.value)} />
+                <form className={formStyles.form} onSubmit={submitForm}>
+                    <div className={formStyles.formGroup}>
+                        <label className={name.errors.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Name *</label>
+                        <input type="text" className={formStyles.formControl} value={name.value} onChange={(e) => onChangeController("name", e.target.value)} />
                         {
-                            name.errors.map((error, index) => <small key={"name-error" + index} className={stylesProject.formControlError}>{error}</small>)
+                            name.errors.map((error, index) => <small key={"name-error" + index} className={formStyles.formControlError}>{error}</small>)
                         }
                     </div>
-                    <div className={stylesProject.formGroup}>
-                        <label className={description.errors.length > 0 ? stylesProject.formLabelError : stylesProject.formLabel}>Domain and Main Problem *</label>
-                        <textarea className={stylesProject.formControl} value={description.value} onChange={(e) => setFormController("description", e.target.value)} ></textarea>
+                    <div className={formStyles.formGroup}>
+                        <label className={description.errors.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem *</label>
+                        <textarea className={formStyles.formControl} value={description.value} onChange={(e) => onChangeController("description", e.target.value)} ></textarea>
                         {
-                            description.errors.map((error, index) => <small key={"description-error" + index} className={stylesProject.formControlError}>{error}</small>)
+                            description.errors.map((error, index) => <small key={"description-error" + index} className={formStyles.formControlError}>{error}</small>)
                         }
                     </div>
-                    <div className={stylesProject.formGroup}>
-                        <label className={stylesProject.formLabel}>Priority</label>
-                        <input type="number" className={stylesProject.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, errors: [] })} />
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Priority</label>
+                        <input type="number" className={formStyles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, errors: [] })} />
                     </div>
-                    <div className={stylesProject.formGroup}>
-                        <label className={stylesProject.formLabel}>URL</label>
-                        <input type="text" className={stylesProject.formControl} value={url.value} onChange={(e) => setUrl({ value: e.target.value, errors: [] })} />
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>URL</label>
+                        <input type="text" className={formStyles.formControl} value={url.value} onChange={(e) => setUrl({ value: e.target.value, errors: [] })} />
                     </div>
-                    <div className={`${stylesProject.formGroup} ${stylesProject.formGroupHasButton}`}>
+                    <div className={`${formStyles.formGroup} ${formStyles.formGroupHasButton}`}>
                         {
                             preview ?
-                                <Image width={100} height={100} className={stylesProject.imagePreview} src={preview} alt="Preview" />
+                                <Image width={100} height={100} className={formStyles.imagePreview} src={preview} alt="Preview" />
                                 :
-                                <i className={stylesProject.imagePreview}></i>
+                                <i className={formStyles.imagePreview}></i>
                         }
-                        <label className={stylesProject.formUpload}>
-                            <input className={stylesProject.formControl} type="file" accept="image/*" onChange={handleFileChange} />
-                            <i className={stylesProject.innerButton}>Upload</i>
+                        <label className={formStyles.formUpload}>
+                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onFileChanged} />
+                            <i className={formStyles.innerButton}>Upload</i>
                         </label>
                     </div>
-                    <div className={stylesProject.formGroup}>
-                        <label className={stylesProject.formLabel}>Logo Alt</label>
-                        <input type="text" className={stylesProject.formControl} value={logoAlt.value} onChange={(e) => setCoverAlt({ value: e.target.value, errors: [] })} />
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Logo Alt</label>
+                        <input type="text" className={formStyles.formControl} value={logoAlt.value} onChange={(e) => setCoverAlt({ value: e.target.value, errors: [] })} />
                     </div>
-                    <h5 className={stylesProject.formSectionTitle}>Technologies</h5>
-                    <div className={stylesProject.formGroup}>
-                        <label className={techDescription.errors.length > 0 ? stylesProject.formLabelError : stylesProject.formLabel}>About Technologies *</label>
-                        <textarea className={stylesProject.formControl} value={techDescription.value} onChange={(e) => setFormController("techDescription", e.target.value)} ></textarea>
+                    <h5 className={formStyles.formSectionTitle}>Technologies</h5>
+                    <div className={formStyles.formGroup}>
+                        <label className={techDescription.errors.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies *</label>
+                        <textarea className={formStyles.formControl} value={techDescription.value} onChange={(e) => onChangeController("techDescription", e.target.value)} ></textarea>
                         {
-                            techDescription.errors.map((error, index) => <small key={"techDescription-error" + index} className={stylesProject.formControlError}>{error}</small>)
+                            techDescription.errors.map((error, index) => <small key={"techDescription-error" + index} className={formStyles.formControlError}>{error}</small>)
                         }
                     </div>
-                    <ul className={stylesPage.projectTechList}>
-                        {technologies.map((tech, index) => <li key={index} onClick={() => { onRemoveTechnology(tech) }}>{tech.name}</li>)}
+                    <ul className={componentStyles.projectTechList}>
+                        {technologies.map((tech, index) => <li key={index} onClick={() => { onRemovedTechnology(tech) }}>{tech.name}</li>)}
                     </ul>
-                    <button type="button" className={styles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Tech" : "Add Tech"}</button>
-                    {innerForm ? <InnerForm dataHandler={handleTechnologyData} /> : ''}
-                    <div className={stylesProject.formButtons}>
-                        <button type="submit" className={stylesProject.submitButton}>Save Changes</button>
+                    <button type="button" className={commonStyles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Tech" : "Add Tech"}</button>
+                    {innerForm ? <InnerForm onSubmit={onInnerFormSubmitted} /> : ''}
+                    <div className={formStyles.formButtons}>
+                        <button type="submit" className={formStyles.submitButton}>Save Changes</button>
                     </div>
                 </form>
             </div>

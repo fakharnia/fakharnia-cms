@@ -82,11 +82,13 @@
 }
 
 .isCover {
-    position  : absolute;
-    bottom    : 15px;
-    left      : 15px;
-    background: var(--color-light-a);
-    width     : 15px;
-    height    : 15px;
-    box-shadow: 0 0 0 5px var(--color-light-a);
+    position   : absolute;
+    bottom     : 10px;
+    left       : 10px;
+    background : var(--color-light-a);
+    height     : 25px;
+    line-height: 25px;
+    text-align : center;
+    font-weight: bold;
+    padding    : 0 10px;
 }

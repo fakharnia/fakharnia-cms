@@ -1,25 +1,28 @@
 "use client"
 
-import styles from "./page.module.css";
-
+import commonStyles from "./page.module.css";
 import { MenuProvider } from "../context/menuContext";
+import { DashboardMessageProvider } from "./context/messageContext";
 import { MenuComponent } from "./components/menu";
+import { DashboardMessage } from "./components/message";
 
 const layout = ({ children }) => {
 
     return (
         <>
             <title>Fakharnia CMS / Dashboard</title>
-            <MenuProvider>
-                <div className={`${styles.container} flex-row flex-justify-around flex-align-center`}>
-                    <div className={`${styles.layout} flex-row flex-justify-between`}>
-                        <MenuComponent />
-                        {children}
+            <DashboardMessageProvider>
+                <MenuProvider>
+                    <div className={`${commonStyles.container} flex-row flex-justify-around flex-align-center`}>
+                        <div className={`${commonStyles.layout} flex-row flex-justify-between`}>
+                            <MenuComponent />
+                            {children}
+                            <DashboardMessage />
+                        </div>
                     </div>
-                </div>
-            </MenuProvider>
+                </MenuProvider>
+            </DashboardMessageProvider>
         </>
     )
 }
-
 export default layout

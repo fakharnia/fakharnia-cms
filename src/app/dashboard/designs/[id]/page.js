@@ -4,25 +4,25 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../../page.module.css";
+import commonStyles from "../../page.module.css";
+import componentStyles from "../page.module.css";
 import formStyles from "../../styles/form.module.css";
-import designStyles from "../page.module.css";
-import InnerForm from "./innerForm";
-
 import { useMessage } from "@/app/context/messageContext";
 import { useMenu } from "@/app/context/menuContext";
-import { create, update, gets } from "./action";
-import { getDesign } from "@/lib/design.lib";
+import { createAction, updateAction, getAction } from "../action";
+import InnerForm from "./innerForm";
 
 export const Form = ({ params }) => {
+    const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
+
     const { addMessage, cancel } = useMessage();
     const { changeMenu } = useMenu();
     const router = useRouter();
-    const previewURL = process.env.NEXT_PUBLIC_API;
 
     const [mode, setMode] = useState("create");
     const [innerForm, setInnerForm] = useState(false);
 
+    // Form properties
     const [_id, setId] = useState("");
     const [title, setTitle] = useState({ value: "", error: "" });
     const [description, setDescription] = useState({ value: "", error: "" });
@@ -31,31 +31,36 @@ export const Form = ({ params }) => {
     const [deletedImages, setDeletedImages] = useState([]);
 
     const fetchDesign = async () => {
-        const response = await getDesign(params.id)
-        setId(response?._id ?? "");
-        setTitle({ value: response?.title ?? "", error: "" });
-        setPriority({ value: response?.priority ?? "", error: "" });
-        setDescription({ value: response?.description ?? "", error: "" });
-        setImages({ value: response?.images ?? [], error: "" });
-        setMode(response?._id ? "edit" : "create");
+        try {
+            const response = await getAction(params.id)
+            setId(response?._id ?? "");
+            setTitle({ value: response?.title ?? "", error: "" });
+            setPriority({ value: response?.priority ?? "", error: "" });
+            setDescription({ value: response?.description ?? "", error: "" });
+            setImages({ value: response?.images ?? [], error: "" });
+            setMode(response?._id ? "edit" : "create");
+        } catch (error) {
+            addMessage({ text: "Connection to server failed!", cancel: cancel, type: "error" });
+        }
     }
 
     useEffect(() => {
         if (params.id !== '0') {
             fetchDesign();
         }
+        changeMenu("/dashboard/designs");
     }, [])
 
-    const deleteImageHandler = (eventData) => {
+    const onInnerFormSubmitted = (file) => {
+        setImages({ value: [...images.value, file], error: "" });
+        setInnerForm(false);
+    }
+
+    const onDeleteImage = (eventData) => {
         setImages({ value: images.value.filter(img => JSON.stringify(img) !== JSON.stringify(eventData)), error: "" });
         if (mode === "edit") {
             setDeletedImages([...deletedImages, eventData]);
         }
-    }
-
-    const handleImageData = (file) => {
-        setImages({ value: [...images.value, file], error: "" });
-        setInnerForm(false);
     }
 
     const formValidation = () => {
@@ -64,7 +69,7 @@ export const Form = ({ params }) => {
         return result;
     }
 
-    const submitHandler = async (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
         if (formValidation()) {
             const form = new FormData();
@@ -80,27 +85,34 @@ export const Form = ({ params }) => {
                     form.append(`images`, img.file);
                 }
             });
-            if (mode === "edit") {
-                await update(form);
-            } else {
-                await create(form);
-            }
 
-            addMessage({ text: "Service Successfully Created", okText: "OK", ok: cancel });
-            changeMenu("/dashboard/designs");
-            router.push("/dashboard/designs");
+            try {
+                const result = mode === "create" ? await createAction(form) : updateAction(form);
+
+                if (result !== undefined) {
+                    addMessage({ text: "Service Successfully Created", okText: "OK", ok: cancel });
+                    changeMenu("/dashboard/designs");
+                    router.push("/dashboard/designs");
+
+                } else {
+                    addMessage({ text: "Operation Failed!", cancel: cancel, type: "error" });
+                }
+
+            } catch (error) {
+                addMessage({ text: "Connection to server failed!", type: "error", cancel: cancel });
+            }
         }
     }
 
     return (
         <>
             <title>Fakharnai CM | Projects/{mode === 'edit' ? 'Edit' : 'Define'}</title>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h5 className={styles.pageTitle}>{mode === 'edit' ? 'Edit' : 'Define'} UI</h5>
-                    <Link className={styles.pageAddButton} href="/dashboard/designs">Back</Link>
+            <div className={commonStyles.pageContainer}>
+                <div className={commonStyles.pageHeader}>
+                    <h5 className={commonStyles.pageTitle}>{mode === 'edit' ? 'Edit' : 'Define'} UI</h5>
+                    <Link className={commonStyles.pageAddButton} href="/dashboard/designs">Back</Link>
                 </div>
-                <form className={formStyles.form} onSubmit={submitHandler}>
+                <form className={formStyles.form} onSubmit={submitForm}>
                     <div className={formStyles.formGroup}>
                         <label className={title.error ? formStyles.formLabelError : formStyles.formLabel}>Title *</label>
                         <input type="text" className={formStyles.formControl} value={title.value} onChange={(e) => setTitle({ value: e.target.value, error: "" })} />
@@ -116,19 +128,19 @@ export const Form = ({ params }) => {
                         <input type="number" className={formStyles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, errors: [] })} />
                     </div>
                     <h5 className={formStyles.formSectionTitle}>Images</h5>
-                    <button type="button" className={styles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Image" : "Add Image"}</button>
-                    <div className={designStyles.imagesList}>
+                    <button type="button" className={commonStyles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Image" : "Add Image"}</button>
+                    <div className={componentStyles.imagesList}>
                         {
                             images.value.map(image => (
-                                <div className={designStyles.imageEl}>
-                                    <Image width={200} height={190} src={image.preview ?? `${previewURL}/public/design/${image?.fileUrl}`} alt={image.fileAlt}
-                                        onClick={() => deleteImageHandler(image)} />
-                                    {image.isCover ? <i className={designStyles.isCover}></i> : ""}
+                                <div className={componentStyles.imageEl}>
+                                    <Image width={200} height={190} src={image.preview ?? `${previewURL}/design/${image?.fileUrl}`} alt={image.fileAlt}
+                                        onClick={() => onDeleteImage(image)} />
+                                    {image.isCover ? <i className={componentStyles.isCover}>This is cover</i> : ""}
                                 </div>
                             ))
                         }
                     </div>
-                    {innerForm ? <InnerForm dataHandler={handleImageData} /> : ''}
+                    {innerForm ? <InnerForm onSubmit={onInnerFormSubmitted} /> : ''}
                     <div className={formStyles.formButtons}>
                         <button type="submit" className={formStyles.submitButton}>Save Changes</button>
                     </div>

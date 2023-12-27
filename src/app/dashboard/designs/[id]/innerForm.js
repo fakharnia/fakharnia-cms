@@ -3,9 +3,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import styles from "../../styles/form.module.css";
+import commonStyles from "../../page.module.css";
+import formStyles from "../../styles/form.module.css";
 
-export const InnerForm = ({ dataHandler }) => {
+export const InnerForm = ({ onSubmit }) => {
 
     const [priority, setPriority] = useState({ value: null, error: "" });
     const [fileUrl, setFileUrl] = useState({ value: "", error: "" });
@@ -54,46 +55,50 @@ export const InnerForm = ({ dataHandler }) => {
                 file: selectedFile,
                 preview: preview
             }
-            dataHandler(data);
+            onSubmit(data);
         }
     }
 
     return (
         <>
-            <form className={styles.form} >
-                <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Priority *</label>
-                    <input type="number" className={styles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, error: "" })} />
-                    {priority.error.length > 0 ? <small className={styles.formControlError}>{priority.error}</small> : ''}
-                </div>
-                <div className={`${styles.formGroup}`}>
-                    <label className={styles.formLabel}>File *</label>
+            <div className={commonStyles.pageHeader}>
+                <h5 className={commonStyles.pageTitle}>Add Image</h5>
+            </div>
+            <form className={formStyles.form} >
+                <div className={`${formStyles.formGroup}`}>
+                    <label className={formStyles.formLabel}>File *</label>
                     {
                         preview ?
-                            <Image width={200} height={190} className={styles.coverImagePreview} src={preview} alt="Preview" />
+                            <Image width={200} height={190} className={formStyles.coverImagePreview} src={preview} alt="Preview" />
                             :
-                            <i className={styles.coverImagePreview}></i>
+                            <i className={formStyles.coverImagePreview}></i>
                     }
 
-                    <label className={styles.formUpload}>
-                        <input className={styles.formControl} type="file" accept="image/*" onChange={handleFileChange} />
-                        <i className={styles.innerButton}>Upload</i>
+                    <label className={formStyles.formUpload}>
+                        <input className={formStyles.formControl} type="file" accept="image/*" onChange={handleFileChange} />
+                        <i className={formStyles.innerButton}>Upload</i>
                     </label>
-                    <small className={styles.formControlError}>{fileUrl.error}</small>
+                    <small className={formStyles.formControlError}>{fileUrl.error}</small>
                 </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>File Alt</label>
-                    <input type="text" className={styles.formControl} value={fileAlt.value} onChange={(e) => setFileAlt(e.target.value)} />
+                <div className={formStyles.formGroup}>
+                    <label className={formStyles.formLabel}>File Alt</label>
+                    <input type="text" className={formStyles.formControl} value={fileAlt.value} onChange={(e) => setFileAlt(e.target.value)} />
                 </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.checkboxLabel}>
-                        <input type="checkbox" className={styles.hide} checked={isCover} onChange={(e) => setIsCover(e.target.checked)} />
-                        <p>The Image is cover</p>
+                <div className={formStyles.formGroup}>
+                    <label className={formStyles.checkboxLabel}>
+                        <input type="checkbox" className={formStyles.hide} checked={isCover} onChange={(e) => setIsCover(e.target.checked)} />
+                        <p>The Image is cover of this design</p>
                         <i></i>
                     </label>
                 </div>
-                <div className={styles.formButtons}>
-                    <button type="button" className={styles.submitInnerButton} onClick={submitHandler}>Add</button>
+                <div className={formStyles.formGroup}>
+                    <label className={formStyles.formLabel}>Priority *</label>
+                    <input type="number" className={formStyles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, error: "" })} />
+                    {priority.error.length > 0 ? <small className={formStyles.formControlError}>{priority.error}</small> : ''}
+                </div>
+
+                <div className={formStyles.formButtons}>
+                    <button type="button" className={formStyles.submitInnerButton} onClick={submitHandler}>Add</button>
                 </div>
             </form >
         </>

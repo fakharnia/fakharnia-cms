@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react"
 import Login from "./components/login";
 
 const Home = () => {
-  console.log("Home mounted!");
   const session = useSession({ required: true, onUnauthenticated() { } })
 
   if (session.status === "authenticated") {

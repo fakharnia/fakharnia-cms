@@ -1,19 +1,15 @@
 "use client"
 
 import { Suspense } from "react";
-
-import styles from "./page.module.css";
-
+import commonStyles from "./page.module.css";
+import Loading from "../loading";
 import { ChatComponent } from "./components/chat";
 import { PostComponent } from "./components/post";
-import Loading from "../loading";
-
 
 const dashboard = () => {
-    console.log("dashboard mount!");
     return (
-        <div className={styles.pageContainer}>
-            <div className={`${styles.chatWidget} flex-row`}>
+        <div className={commonStyles.pageContainer}>
+            <div className={`${commonStyles.chatWidget} flex-row`}>
                 <h5 className="width-block">Latest Chats</h5>
                 <ul className="width-block">
                     <Suspense fallback={<Loading />}>
@@ -22,7 +18,7 @@ const dashboard = () => {
                 </ul>
             </div>
 
-            <div className={`${styles.postWidget}  flex-row`}>
+            <div className={`${commonStyles.postWidget}  flex-row`}>
                 <h5 className="width-block">Latest Posts</h5>
                 <ul className="width-block">
                     <Suspense fallback={<Loading />}>

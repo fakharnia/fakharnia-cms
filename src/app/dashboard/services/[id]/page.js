@@ -5,19 +5,21 @@ import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown';
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../../page.module.css";
+import commonStyles from "../../page.module.css";
 import formStyles from "../../styles/form.module.css";
-
-import { useMessage } from "@/app/context/messageContext";
 import { useMenu } from "@/app/context/menuContext";
-import { getService } from "@/lib/service.lib";
-import { create, update } from "./action";
+import { useDashboardMessage } from "../../context/messageContext";
+import { createAction, getAction, updateAction } from "../action";
 
 export const Form = ({ params }) => {
 
-    const { addMessage, cancel } = useMessage();
+    const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
+    const router = useRouter();
+
+    const { addMessage, cancel } = useDashboardMessage();
     const { changeMenu } = useMenu();
 
+    // Form properties
     const [_id, setId] = useState();
     const [title, setTitle] = useState({ value: "", error: "" });
     const [priority, setPriority] = useState({ value: null, error: "" });
@@ -28,15 +30,8 @@ export const Form = ({ params }) => {
     const [selectedFile, setSelectedFile] = useState("");
     const [mode, setMode] = useState("create");
 
-    const previewURL = process.env.NEXT_PUBLIC_API;
-
-    const router = useRouter();
-
-    const [service, setService] = useState([])
-
     const fetchService = async () => {
-        const response = await getService(params.id);
-        setService(response ?? []);
+        const response = await getAction(params.id);
 
         setId(response?._id ?? "");
         setTitle({ value: response?.title ?? "", error: "" });
@@ -44,7 +39,7 @@ export const Form = ({ params }) => {
         setContent({ value: response?.content ?? "", error: "" });
         setCoverUrl({ value: response?.coverUrl ?? "", error: "" });
         setCoverAlt(response?.coverAlt ?? "");
-        setPreview(response?.coverUrl ? `${previewURL}/public/service/${response?.coverUrl}` : "");
+        setPreview(response?.coverUrl ? `${previewURL}/service/${response?.coverUrl}` : "");
         setSelectedFile("");
         setMode(response?._id ? "edit" : "create");
     }
@@ -53,9 +48,10 @@ export const Form = ({ params }) => {
         if (params.id !== '0') {
             fetchService();
         }
+        changeMenu("/dashboard/designs");
     }, [])
 
-    const handleFileChange = (event) => {
+    const onFileChanged = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
@@ -89,7 +85,7 @@ export const Form = ({ params }) => {
         return result;
     }
 
-    const submitHandler = async (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
         if (formValidation()) {
             const form = new FormData();
@@ -102,27 +98,32 @@ export const Form = ({ params }) => {
             form.append('cover', selectedFile ?? null);
             form.append("coverChanged", selectedFile ? true : false);
 
-            if (mode === "edit") {
-                await update(form);
-            } else {
-                await create(form);
-            }
+            try {
+                const result = mode === "create" ? await createAction(form) : await updateAction(form);
 
-            addMessage({ text: "Service Successfully Created", okText: "OK", ok: cancel });
-            changeMenu("/dashboard/services");
-            router.push("/dashboard/services");
+                if (result !== undefined) {
+                    addMessage({ text: "Service Successfully Created", type: "message", cancel: cancel });
+                    changeMenu("/dashboard/services");
+                    router.push("/dashboard/services");
+                } else {
+                    addMessage({ text: "Operation Failed!", okText: "OK", ok: cancel });
+                }
+
+            } catch (error) {
+                addMessage({ text: "Connection to server failed!", type: "error", cancel: cancel });
+            }
         }
     }
 
     return (
         <>
             <title>Fakharnai CM | Services/Form</title>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h5 className={styles.pageTitle}>{mode === 'edit' ? 'Edit' : 'Create'} Service</h5>
-                    <Link className={styles.pageAddButton} href="/dashboard/services">Back</Link>
+            <div className={commonStyles.pageContainer}>
+                <div className={commonStyles.pageHeader}>
+                    <h5 className={commonStyles.pageTitle}>{mode === 'edit' ? 'Edit' : 'Create'} Service</h5>
+                    <Link className={commonStyles.pageAddButton} href="/dashboard/services">Back</Link>
                 </div>
-                <form className={formStyles.form} onSubmit={submitHandler}>
+                <form className={formStyles.form} onSubmit={submitForm}>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Title *</label>
                         <input type="text" className={formStyles.formControl} value={title.value} onChange={(e) => setTitle({ value: e.target.value, error: "" })} />
@@ -154,7 +155,7 @@ export const Form = ({ params }) => {
                         }
 
                         <label className={formStyles.formUpload}>
-                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={handleFileChange} />
+                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onFileChanged} />
                             <i className={formStyles.innerButton}>Upload</i>
                         </label>
                         <small className={formStyles.formControlError}>{coverUrl.error}</small>

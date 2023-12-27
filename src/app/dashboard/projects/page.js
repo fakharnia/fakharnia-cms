@@ -3,32 +3,34 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../page.module.css";
-import projectStyles from "./page.module.css";
-import { useMessage } from "@/app/context/messageContext";
-import { getProjects } from "@/lib/project.lib";
-import { deleteProject } from "@/lib/project.lib";
+import commonStyles from "../page.module.css";
+import componentStyles from "./page.module.css";
+import { useDashboardMessage } from "../context/messageContext";
+import { getsAction, deleteAction } from "./action";
 
 export const Projects = () => {
+    const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
 
+    const { addMessage, cancel } = useDashboardMessage();
     const [projects, setProjects] = useState([]);
-    const previewURL = process.env.NEXT_PUBLIC_API;
-    const { addMessage, cancel } = useMessage();
 
-
-    const handleDelete = async (projectId) => {
-        const result = await deleteProject(projectId);
+    const onDeleteProject = async (projectId) => {
+        const result = await deleteAction(projectId);
         if (result !== undefined) {
-            addMessage({ text: "Project Successfully Deleted", okText: "OK", ok: cancel });
+            addMessage({ text: "Project Successfully Deleted", cancel: cancel, type: "message" });
             await fetchProjects();
         } else {
-            addMessage({ text: "Operation Failed!", okText: "OK", ok: cancel });
+            addMessage({ text: "Operation Failed!", cancel: cancel, type: "error" });
         }
     }
 
     const fetchProjects = async () => {
-        const response = await getProjects() || [];
-        setProjects(response ?? []);
+        try {
+            const response = await getsAction() || [];
+            setProjects(response ?? []);
+        } catch (error) {
+            addMessage({ text: "Connection to server failed!", cancel: cancel, type: "error" });
+        }
     };
 
     useEffect(() => {
@@ -38,22 +40,22 @@ export const Projects = () => {
     return (
         <>
             <title>Fakharnia CMS | Projects</title>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h5 className={styles.pageTitle}>Projects</h5>
-                    <Link className={styles.pageAddButton} href="./projects/0">Add</Link>
+            <div className={commonStyles.pageContainer}>
+                <div className={commonStyles.pageHeader}>
+                    <h5 className={commonStyles.pageTitle}>Projects</h5>
+                    <Link className={commonStyles.pageAddButton} href="./projects/0">Add</Link>
                 </div>
-                <ul className={projectStyles.projectsList}>
+                <ul className={componentStyles.projectsList}>
                     {
                         projects.map((project, index) =>
                         (
-                            <li key={project._id} className={projectStyles.project}>
-                                <Image className={projectStyles.projectLogo} src={`${previewURL}/public/project/${project.logoUrl}`} width={500} height={190} alt={project.logoAlt} />
-                                <div className={projectStyles.projectBox}>
-                                    <h5 className={projectStyles.projectName}>{project.name}</h5>
-                                    <div className={projectStyles.projectOptions}>
-                                        <Link className={projectStyles.projectButton} href={"/dashboard/projects/" + project._id}>Edit</Link>
-                                        <button className={projectStyles.projectButton} onClick={() => { handleDelete(project._id) }}>Delete</button>
+                            <li key={project._id} className={componentStyles.project}>
+                                <Image className={componentStyles.projectLogo} src={`${previewURL}/project/${project.logoUrl}`} width={500} height={190} alt={project.logoAlt} />
+                                <div className={componentStyles.projectBox}>
+                                    <h5 className={componentStyles.projectName}>{project.name}</h5>
+                                    <div className={componentStyles.projectOptions}>
+                                        <Link className={componentStyles.projectButton} href={"/dashboard/projects/" + project._id}>Edit</Link>
+                                        <button className={componentStyles.projectButton} onClick={() => { onDeleteProject(project._id) }}>Delete</button>
                                     </div>
 
                                 </div>
@@ -61,7 +63,7 @@ export const Projects = () => {
                         ))
                     }
                 </ul>
-                {projects.length === 0 ? <p className={projectStyles.noData}>There isn't any project yet!</p> : ""}
+                {projects.length === 0 ? <p className={componentStyles.noData}>There isn't any project yet!</p> : ""}
             </div>
         </>
     )

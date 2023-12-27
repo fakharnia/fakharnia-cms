@@ -255,3 +255,31 @@
     color      : var(--color-light-a);
     font-style : italic;
 }
+
+.message {
+    background   : var(--color-dark-b);
+    position     : absolute;
+    bottom       : 10px;
+    left         : 10px;
+    display      : flex;
+    flex-flow    : row wrap;
+    align-content: center;
+    width        : 230px;
+    padding      : 10px;
+    box-shadow   : var(--shadow-a);
+}
+
+.message>p {
+    width      : 100%;
+    color      : var(--color-light-a);
+    line-height: 40px;
+    font-size  : 18px;
+}
+
+.typeError {
+    background: var(--color-red-a);
+}
+
+.typeMessage {
+    background: var(--color-dark-b);
+}

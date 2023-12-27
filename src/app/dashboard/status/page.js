@@ -4,14 +4,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../page.module.css";
+import commonStyles from "../page.module.css";
 import formStyles from "../styles/form.module.css";
 import { useMenu } from "@/app/context/menuContext";
-import { useMessage } from "@/app/context/messageContext";
+import { useDashboardMessage } from "../context/messageContext";
 import { getStatus } from "@/lib/status.lib";
+import { updateAction } from "./action";
 
 const Status = () => {
+    const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
+    const router = useRouter();
 
+    // Contextes
+    const { changeMenu } = useMenu();
+    const { addMessage, cancel } = useDashboardMessage();
+
+    // Form properties
     const [_id, setId] = useState("");
     const [dailyText, setDailyText] = useState("");
     const [title, setTitle] = useState("");
@@ -21,25 +29,14 @@ const Status = () => {
     const [selectedFile, setSelectedFile] = useState("");
     const [deleteAvatar, setDeleteAvatar] = useState(false);
 
-    const { addMessage, cancel } = useMessage();
-
-    const previewURL = process.env.NEXT_PUBLIC_API;
-
-    const router = useRouter();
-
-    const { changeMenu } = useMenu();
-
-    const [data, setData] = useState([]);
-
     const fetChStatus = async () => {
         const response = await getStatus()
-        setData(response ?? []);
         setId(response?._id ?? "");
         setDailyText(response?.dailyText ?? "");
         setTitle(response?.title ?? "");
         setState(response?.state ?? "");
         setAvatarUrl(response?.avatarUrl ?? "");
-        setPreview(response?.avatarUrl ? `${previewURL}/public/avatar/${response?.avatarUrl}` : null);
+        setPreview(response?.avatarUrl ? `${previewURL}/avatar/${response?.avatarUrl}` : null);
         setSelectedFile(null ?? "");
         setDeleteAvatar(false);
     };
@@ -49,9 +46,7 @@ const Status = () => {
         changeMenu("/dashboard/status");
     }, []);
 
-
-
-    const handleFileChange = (event) => {
+    const onFileChanged = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
@@ -65,40 +60,57 @@ const Status = () => {
         }
     };
 
-    const handleDeleteAvatar = (event) => {
+    const onDeleteAvatar = (event) => {
         setDeleteAvatar(true);
         setPreview(null);
         setAvatarUrl(null);
     }
 
-    const submitHandler = async (event) => {
+    const formValidation = () => {
+        var result = true;
+
+
+        return result;
+    }
+
+    const submitForm = async (event) => {
         event.preventDefault();
+        if (formValidation()) {
+            const form = new FormData();
+            form.append("_id", _id ?? null);
+            form.append("dailyText", dailyText ?? null);
+            form.append("title", title ?? null);
+            form.append("state", state ?? null);
+            form.append("avatarUrl", avatarUrl ?? null);
+            form.append('avatar', selectedFile ?? null);
+            form.append("deleteAvatar", deleteAvatar);
 
-        const form = new FormData();
-        form.append("_id", _id ?? null);
-        form.append("dailyText", dailyText ?? null);
-        form.append("title", title ?? null);
-        form.append("state", state ?? null);
-        form.append("avatarUrl", avatarUrl ?? null);
-        form.append('avatar', selectedFile ?? null);
-        form.append("deleteAvatar", deleteAvatar);
+            try {
+                const result = await updateAction(form);
 
-        await submit(form);
+                if (result !== undefined) {
+                    addMessage({ text: "Status Successfully Updated", okText: "OK", ok: cancel });
+                    changeMenu("/dashboard");
+                    router.push("/dashboard");
+                } else {
+                    addMessage({ text: "Operation Failed!", okText: "OK", ok: cancel });
+                }
 
-        addMessage({ text: "Status Successfully Updated", okText: "OK", ok: cancel });
-        changeMenu("/dashboard");
-        router.push("/dashboard");
+            } catch (error) {
+                addMessage({ text: "Connection to server failed!", type: "error", cancel: cancel });
+            }
+        }
     }
 
     return (
         <>
             <title>Fakharnia CMS | Status</title>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h5 className={styles.pageTitle}>Status</h5>
-                    <Link href="/dashboard" className={styles.pageReturnButton} onClick={() => { changeMenu("/dashbaord") }}>Return</Link>
+            <div className={commonStyles.pageContainer}>
+                <div className={commonStyles.pageHeader}>
+                    <h5 className={commonStyles.pageTitle}>Status</h5>
+                    <Link href="/dashboard" className={commonStyles.pageReturnButton} onClick={() => { changeMenu("/dashbaord") }}>Return</Link>
                 </div>
-                <form className={formStyles.form} onSubmit={submitHandler}>
+                <form className={formStyles.form} onSubmit={submitForm}>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Daily Text</label>
                         <textarea className={formStyles.formControl} value={dailyText} onChange={(e) => setDailyText(e.target.value)} ></textarea>
@@ -124,10 +136,10 @@ const Status = () => {
                         }
 
                         <label className={formStyles.formUpload}>
-                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={handleFileChange} />
+                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onFileChanged} />
                             <i className={formStyles.innerButton}>Upload</i>
                         </label>
-                        <button className={formStyles.innerButton} type="button" onClick={handleDeleteAvatar}>Delete</button>
+                        <button className={formStyles.innerButton} type="button" onClick={onDeleteAvatar}>Delete</button>
                     </div>
                     <div className={formStyles.formButtons}>
                         <button type="submit" className={formStyles.submitButton}>Save Changes</button>

@@ -1,27 +1,25 @@
 "use client"
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from 'react-markdown';
 import Link from "next/link";
 import Image from "next/image";
-import ReactMarkdown from 'react-markdown';
-
-import styles from "../page.module.css";
-import serviceStyles from "./page.module.css";
-
-import { getServices, deleteService } from "@/lib/service.lib";
+import commonStyles from "../page.module.css";
+import componentStyles from "./page.module.css";
 import { useMenu } from "@/app/context/menuContext";
-import { useMessage } from "@/app/context/messageContext";
-
+import { useDashboardMessage } from "../context/messageContext";
+import { deleteAction, getsAction } from "./action";
 
 const Services = () => {
+    const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
 
     const { changeMenu } = useMenu();
+    const { addMessage, cancel } = useDashboardMessage();
+
     const [services, setServices] = useState([]);
-    const previewURL = process.env.NEXT_PUBLIC_API;
-    const { addMessage, cancel } = useMessage();
 
     const fetchServices = async () => {
-        const response = await getServices();
+        const response = await getsAction();
         setServices(response ?? []);
     }
 
@@ -30,40 +28,40 @@ const Services = () => {
         changeMenu("/dashboard/services");
     }, [])
 
-    const handleDelete = async (serviceId) => {
-        const result = await deleteService(serviceId);
+    const onDeleteService = async (serviceId) => {
+        const result = await deleteAction(serviceId);
         if (result !== undefined) {
-            addMessage({ text: "PService Successfully Deleted", okText: "OK", ok: cancel });
+            addMessage({ text: "Service Successfully Deleted", cancel: cancel });
             await fetchServices();
         } else {
-            addMessage({ text: "Operation Failed!", okText: "OK", ok: cancel });
+            addMessage({ text: "Operation Failed!", cancel: cancel });
         }
     }
 
     return (
         <>
             <title>Fakharnia CMS | Services</title>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h5 className={styles.pageTitle}>Services</h5>
-                    <Link className={styles.pageAddButton} href="./services/0">Add</Link>
+            <div className={commonStyles.pageContainer}>
+                <div className={commonStyles.pageHeader}>
+                    <h5 className={commonStyles.pageTitle}>Services</h5>
+                    <Link className={commonStyles.pageAddButton} href="./services/0">Add</Link>
                 </div>
-                <ul className={serviceStyles.servicesList}>
+                <ul className={componentStyles.servicesList}>
                     {
                         services.map((service, index) =>
-                        (<li key={index} className={serviceStyles.service}>
-                            <Image className={serviceStyles.serviceImage} src={`${previewURL}/public/service/${service.coverUrl}`} width={500} height={190} alt={service.coverAlt} />
-                            <h5 className={serviceStyles.serviceTitle}>{service.title}</h5>
-                            <ReactMarkdown className={serviceStyles.serviceDescription}>{service.content}</ReactMarkdown>
-                            <div className={serviceStyles.serviceOptions}>
-                                <Link className={serviceStyles.serviceButton} href={"/dashboard/services/" + service._id}>Edit</Link>
-                                <button className={serviceStyles.serviceButton} onClick={() => { handleDelete(service._id) }}>Delete</button>
+                        (<li key={index} className={componentStyles.service}>
+                            <Image className={componentStyles.serviceImage} src={`${previewURL}/service/${service.coverUrl}`} width={500} height={190} alt={service.coverAlt} />
+                            <h5 className={componentStyles.serviceTitle}>{service.title}</h5>
+                            <ReactMarkdown className={componentStyles.serviceDescription}>{service.content}</ReactMarkdown>
+                            <div className={componentStyles.serviceOptions}>
+                                <Link className={componentStyles.serviceButton} href={"/dashboard/services/" + service._id}>Edit</Link>
+                                <button className={componentStyles.serviceButton} onClick={() => { onDeleteService(service._id) }}>Delete</button>
                             </div>
                         </li>)
                         )
                     }
                 </ul>
-                {services.length === 0 ? <p className={serviceStyles.noData}>There isn't any service yet!</p> : ""}
+                {services.length === 0 ? <p className={componentStyles.noData}>There isn't any service yet!</p> : ""}
             </div>
         </>
     )
