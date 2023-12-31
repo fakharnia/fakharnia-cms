@@ -1,0 +1,59 @@
+.languagesList,
+.skillsList {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+    padding  : 10px 0;
+    margin   : 10px auto;
+}
+
+.languagesList>li,
+.skillsList>li {
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.languagesList>li>p {
+    width      : 100%;
+    padding    : 0 10px;
+    color      : var(--color-light-a);
+    font-size  : 20px;
+    line-height: 25px;
+}
+
+.skillsList {
+    padding: 0 10px;
+}
+
+.skillsList>li {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+}
+
+.skillsList>li>img {
+    width : 100px;
+    height: 100px;
+}
+
+.skillsList>li>div {
+    width    : calc(100% - 100px);
+    display  : flex;
+    flex-flow: row wrap;
+    padding  : 0 10px;
+
+}
+
+.skillsList>li>div>* {
+    width      : 100%;
+    line-height: 25px;
+    color      : var(--color-light-a);
+}
+
+.skillsList>li>div>p {
+    font-size: 20px;
+}
+
+.skillsList>li>div>small {
+    font-size: 16px;
+}
