@@ -89,11 +89,11 @@ const Status = () => {
                 const result = await updateAction(form);
 
                 if (result !== undefined) {
-                    addMessage({ text: "Status Successfully Updated", okText: "OK", ok: cancel });
+                    addMessage({ text: "Status Successfully Updated", type: "message", cancel: cancel });
                     changeMenu("/dashboard");
                     router.push("/dashboard");
                 } else {
-                    addMessage({ text: "Operation Failed!", okText: "OK", ok: cancel });
+                    addMessage({ text: "Operation Failed!", type: "error", cancel: cancel });
                 }
 
             } catch (error) {

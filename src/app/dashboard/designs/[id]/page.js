@@ -7,7 +7,7 @@ import Image from "next/image";
 import commonStyles from "../../page.module.css";
 import componentStyles from "../page.module.css";
 import formStyles from "../../styles/form.module.css";
-import { useMessage } from "@/app/context/messageContext";
+import { useDashboardMessage } from "../../context/messageContext";
 import { useMenu } from "@/app/context/menuContext";
 import { createAction, updateAction, getAction } from "../action";
 import InnerForm from "./innerForm";
@@ -15,7 +15,7 @@ import InnerForm from "./innerForm";
 export const Form = ({ params }) => {
     const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
 
-    const { addMessage, cancel } = useMessage();
+    const { addMessage, cancel } = useDashboardMessage();
     const { changeMenu } = useMenu();
     const router = useRouter();
 
@@ -73,11 +73,11 @@ export const Form = ({ params }) => {
         event.preventDefault();
         if (formValidation()) {
             const form = new FormData();
+            const imagesData = images.value.map(img => ({ _id: img._id, priority: img.priority, fileAlt: img.fileAlt, fileUrl: img.fileUrl, isCover: img.isCover }));
             form.append("_id", _id ?? null);
             form.append("title", title.value ?? null);
             form.append("description", description.value ?? null);
             form.append("priority", priority.value ?? null);
-            const imagesData = images.value.map(img => ({ _id: img._id, priority: img.priority, fileAlt: img.fileAlt, fileUrl: img.fileUrl, isCover: img.isCover }));
             form.append("imagesData", JSON.stringify(imagesData))
             form.append("deletedImages", JSON.stringify(deletedImages));
             images.value.forEach((img, index) => {
@@ -87,10 +87,9 @@ export const Form = ({ params }) => {
             });
 
             try {
-                const result = mode === "create" ? await createAction(form) : updateAction(form);
-
+                const result = mode === "create" ? await createAction(form) : await updateAction(form);
                 if (result !== undefined) {
-                    addMessage({ text: "Service Successfully Created", okText: "OK", ok: cancel });
+                    addMessage({ text: "Service Successfully Created", type: "message", cancel: cancel });
                     changeMenu("/dashboard/designs");
                     router.push("/dashboard/designs");
 
@@ -129,6 +128,7 @@ export const Form = ({ params }) => {
                     </div>
                     <h5 className={formStyles.formSectionTitle}>Images</h5>
                     <button type="button" className={commonStyles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Image" : "Add Image"}</button>
+                    {innerForm ? <InnerForm onSubmit={onInnerFormSubmitted} /> : ''}
                     <div className={componentStyles.imagesList}>
                         {
                             images.value.map(image => (
@@ -140,7 +140,6 @@ export const Form = ({ params }) => {
                             ))
                         }
                     </div>
-                    {innerForm ? <InnerForm onSubmit={onInnerFormSubmitted} /> : ''}
                     <div className={formStyles.formButtons}>
                         <button type="submit" className={formStyles.submitButton}>Save Changes</button>
                     </div>

@@ -33,12 +33,12 @@ const Login = () => {
                 <Image src="/logo.svg" width={0} height={0} alt="logo" priority={true} />
                 <div className="width-block flex-row flex-justify-around">
                     <label className="width-block flex-row flex-justify-between text-left">Username</label>
-                    <input type="text" placeholder="Enter your username" autoComplete="username" onChange={(e) => setUsername(e.target.value)} />
+                    <input type="text" autoComplete="username" onChange={(e) => setUsername(e.target.value)} />
                     <label className="width-block flex-row flex-justify-between text-left">
                         Password
                         <i className={(passwordInput ? "cms-eye-blocked" : "cms-eye") + " text-center color-light-a"} onMouseEnter={(e) => setPasswordInput(!passwordInput)} onMouseLeave={(e) => setPasswordInput(!passwordInput)}></i>
                     </label>
-                    <input type={passwordInput ? "password" : "text"} placeholder="Enter your password" autoComplete="current-password" onChange={(e) => setPassword(e.target.value)} />
+                    <input type={passwordInput ? "password" : "text"}  autoComplete="current-password" onChange={(e) => setPassword(e.target.value)} />
                     <button type="submit">Submit</button>
                 </div>
             </form>
