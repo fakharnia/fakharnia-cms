@@ -21,25 +21,41 @@ export const Form = ({ params }) => {
 
     // Form properties
     const [_id, setId] = useState();
-    const [title, setTitle] = useState({ value: "", error: "" });
+    const [fa_title, setFa_title] = useState({ value: "", error: "" });
+    const [en_title, setEn_title] = useState({ value: "", error: "" });
+    const [deu_title, setDeu_title] = useState({ value: "", error: "" });
     const [priority, setPriority] = useState({ value: null, error: "" });
-    const [content, setContent] = useState({ value: "", error: "" });
+    const [fa_fileUrl, setFa_fileUrl] = useState({ value: "", error: "" });
+    const [en_fileUrl, setEn_fileUrl] = useState({ value: "", error: "" });
+    const [deu_fileUrl, setDeu_fileUrl] = useState({ value: "", error: "" });
     const [coverUrl, setCoverUrl] = useState({ value: "", error: "" });
     const [coverAlt, setCoverAlt] = useState("");
     const [preview, setPreview] = useState(null);
     const [selectedFile, setSelectedFile] = useState("");
+
+    const [fa_file, setFa_file] = useState("");
+    const [en_file, setEn_file] = useState("");
+    const [deu_file, setDeu_file] = useState("");
+    const [fa_fileChanged, setFa_fileChanged] = useState(false);
+    const [en_fileChanged, setEn_fileChanged] = useState(false);
+    const [deu_fileChanged, setDeu_fileChanged] = useState(false);
+
     const [mode, setMode] = useState("create");
 
     const fetchService = async () => {
         const response = await getAction(params.id);
 
         setId(response?._id ?? "");
-        setTitle({ value: response?.title ?? "", error: "" });
+        setFa_title({ value: response?.fa_title ?? "", error: "" });
+        setEn_title({ value: response?.en_title ?? "", error: "" });
+        setDeu_title({ value: response?.deu_title ?? "", error: "" });
         setPriority({ value: response?.priority ?? "", error: "" });
-        setContent({ value: response?.content ?? "", error: "" });
-        setCoverUrl({ value: response?.coverUrl ?? "", error: "" });
+        setFa_fileUrl({ value: response?.fa_fileUrl ?? "", error: "" });
+        setEn_fileUrl({ value: response?.en_fileUrl ?? "", error: "" });
+        setDeu_fileUrl({ value: response?.deu_fileUrl ?? "", error: "" });
         setCoverAlt(response?.coverAlt ?? "");
         setPreview(response?.coverUrl ? `${previewURL}/service/${response?.coverUrl}` : "");
+        setCoverUrl({ value: response?.coverUrl, error: "" });
         setSelectedFile("");
         setMode(response?._id ? "edit" : "create");
     }
@@ -51,7 +67,7 @@ export const Form = ({ params }) => {
         changeMenu("/dashboard/designs");
     }, [])
 
-    const onFileChanged = (event) => {
+    const onCoverFileChanged = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
@@ -64,20 +80,74 @@ export const Form = ({ params }) => {
         }
     };
 
+    const onFaFileChanged = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setFa_file(file);
+            setFa_fileUrl({ value: file.name, error: "" });
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            if (mode === "edit" && _id) {
+                setFa_fileChanged(true);
+            }
+        }
+    };
+    const onEnFileChanged = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setEn_file(file);
+            setEn_fileUrl({ value: file.name, error: "" });
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            if (mode === "edit" && _id) {
+                setEn_fileChanged(true);
+            }
+        }
+    };
+    const onDeuFileChanged = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setDeu_file(file);
+            setDeu_fileUrl({ value: file.name, error: "" });
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            if (mode === "edit" && _id) {
+                setDeu_fileChanged(true);
+            }
+        }
+    };
+
     const formValidation = () => {
         let result = true;
-        if (title.value?.length === 0) {
+        if (fa_title.value?.length === 0) {
             result = false;
-            setTitle({ ...title, error: "Title required!" });
+            setFa_title({ ...fa_title, error: "Title required!" });
+        }
+        if (en_title.value?.length === 0) {
+            result = false;
+            setEn_title({ ...en_title, error: "Title required!" });
+        }
+        if (deu_title.value?.length === 0) {
+            result = false;
+            setDeu_title({ ...deu_title, error: "Title required!" });
         }
         if (priority.value === null) {
             result = false;
             setPriority({ ...priority, error: "Priority required!" });
         }
-        if (content.value?.length === 0) {
+        if (fa_fileUrl.value?.length === 0) {
             result = false;
-            setContent({ ...content, error: "Content required!" });
+            setFa_fileUrl({ ...fa_fileUrl, error: "Farsi Content required!" });
         }
+        if (en_fileUrl.value?.length === 0) {
+            result = false;
+            setEn_fileUrl({ ...fa_fileUrl, error: "English Content required!" });
+        }
+        if (deu_fileUrl.value?.length === 0) {
+            result = false;
+            setDeu_fileUrl({ ...deu_fileUrl, error: "German Content required!" });
+        }
+
         if (coverUrl.value?.length === 0) {
             result = false;
             setCoverUrl({ ...coverUrl, error: "Cover required!" });
@@ -90,13 +160,25 @@ export const Form = ({ params }) => {
         if (formValidation()) {
             const form = new FormData();
             form.append("_id", _id ?? null);
-            form.append("title", title.value ?? null);
-            form.append("content", content.value ?? null);
+            form.append("fa_title", fa_title.value ?? null);
+            form.append("en_title", en_title.value ?? null);
+            form.append("deu_title", deu_title.value ?? null);
             form.append("priority", priority.value ?? null);
+            form.append("fa_fileUrl", fa_fileUrl.value ?? null);
+            form.append("en_fileUrl", en_fileUrl.value ?? null);
+            form.append("deu_fileUrl", deu_fileUrl.value ?? null);
+
+            form.append("fa_fileChanged", fa_fileChanged ? true : false);
+            form.append("en_fileChanged", en_fileChanged ? true : false);
+            form.append("deu_fileChanged", deu_fileChanged ? true : false);
             form.append("coverUrl", coverUrl.value ?? null);
             form.append("coverAlt", coverAlt ?? null);
-            form.append('cover', selectedFile ?? null);
             form.append("coverChanged", selectedFile ? true : false);
+            form.append('cover', selectedFile ?? null);
+            form.append("fa_file", fa_file);
+            form.append("en_file", en_file);
+            form.append("deu_file", deu_file);
+
 
             try {
                 const result = mode === "create" ? await createAction(form) : await updateAction(form);
@@ -125,26 +207,51 @@ export const Form = ({ params }) => {
                 </div>
                 <form className={formStyles.form} onSubmit={submitForm}>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Title *</label>
-                        <input type="text" className={formStyles.formControl} value={title.value} onChange={(e) => setTitle({ value: e.target.value, error: "" })} />
-                        <small className={formStyles.formControlError}>{title.error}</small>
+                        <label className={formStyles.formLabel}>Farsi Title *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_title.value} onChange={(e) => setFa_title({ value: e.target.value, error: "" })} />
+                        {fa_title.error ? <small className={formStyles.formControlError}>{fa_title.error}</small> : null}
                     </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>English Title *</label>
+                        <input type="text" className={formStyles.formControl} value={en_title.value} onChange={(e) => setEn_title({ value: e.target.value, error: "" })} />
+                        {en_title.error ? <small className={formStyles.formControlError}>{en_title.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>German Title *</label>
+                        <input type="text" className={formStyles.formControl} value={deu_title.value} onChange={(e) => setDeu_title({ value: e.target.value, error: "" })} />
+                        {deu_title.error ? <small className={formStyles.formControlError}>{deu_title.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.uploadLabel}>Farsi Content *</label>
+                        <label className={`${formStyles.formUpload} ${formStyles.uploadNamed}`}>
+                            <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onFaFileChanged} />
+                            <i className={formStyles.uploadText}>{fa_fileUrl.value ? fa_fileUrl.value : "No File Uploaded!"}</i>
+                        </label>
+                        {fa_fileUrl.error ? <small className={formStyles.formControlError}>{fa_fileUrl.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.uploadLabel}>English Content *</label>
+                        <label className={`${formStyles.formUpload} ${formStyles.uploadNamed}`}>
+                            <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onEnFileChanged} />
+                            <i className={formStyles.uploadText}>{en_fileUrl.value ? en_fileUrl.value : "No File Uploaded!"}</i>
+                        </label>
+                        {en_fileUrl.error ? <small className={formStyles.formControlError}>{en_fileUrl.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.uploadLabel}>German Content *</label>
+                        <label className={`${formStyles.formUpload} ${formStyles.uploadNamed}`}>
+                            <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onDeuFileChanged} />
+                            <i className={formStyles.uploadText}>{deu_fileUrl.value ? deu_fileUrl.value : "No File Uploaded!"}</i>
+                        </label>
+                        {deu_fileUrl.error ? <small className={formStyles.formControlError}>{deu_fileUrl.error}</small> : null}
+                    </div>
+
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Priority *</label>
                         <input type="number" className={formStyles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, error: "" })} />
-                        <small className={formStyles.formControlError}>{priority.error}</small>
+                        {priority.error ? <small className={formStyles.formControlError}>{priority.error}</small> : null}
                     </div>
-                    <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Content *</label>
-                        <textarea className={formStyles.formControl} value={content.value} onChange={(e) => setContent({ value: e.target.value, error: "" })} ></textarea>
-                        <small className={formStyles.formControlError}>{content.error}</small>
-                    </div>
-                    <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Content Preview</label>
-                        <div className={formStyles.markdownPreview}>
-                            <ReactMarkdown>{content.value}</ReactMarkdown>
-                        </div>
-                    </div>
+
                     <div className={`${formStyles.formGroup}`}>
                         <label className={formStyles.formLabel}>Cover *</label>
                         {
@@ -155,10 +262,10 @@ export const Form = ({ params }) => {
                         }
 
                         <label className={formStyles.formUpload}>
-                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onFileChanged} />
+                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onCoverFileChanged} />
                             <i className={formStyles.innerButton}>Upload</i>
                         </label>
-                        <small className={formStyles.formControlError}>{coverUrl.error}</small>
+                        {coverUrl.error ? <small className={formStyles.formControlError}>{coverUrl.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Cover Alt</label>

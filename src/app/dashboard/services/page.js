@@ -51,8 +51,7 @@ const Services = () => {
                         services.map((service, index) =>
                         (<li key={index} className={componentStyles.service}>
                             <Image className={componentStyles.serviceImage} src={`${previewURL}/service/${service.coverUrl}`} width={500} height={190} alt={service.coverAlt} />
-                            <h5 className={componentStyles.serviceTitle}>{service.title}</h5>
-                            <ReactMarkdown className={componentStyles.serviceDescription}>{service.content}</ReactMarkdown>
+                            <h5 className={componentStyles.serviceTitle}>{service.en_title}</h5>
                             <div className={componentStyles.serviceOptions}>
                                 <Link className={componentStyles.serviceButton} href={"/dashboard/services/" + service._id}>Edit</Link>
                                 <button className={componentStyles.serviceButton} onClick={() => { onDeleteService(service._id) }}>Delete</button>

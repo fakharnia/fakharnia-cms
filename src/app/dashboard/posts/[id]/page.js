@@ -240,7 +240,7 @@ export const Form = ({ params }) => {
                             <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onFaFileChanged} />
                             <i className={formStyles.uploadText}>{fa_fileUrl.value ? fa_fileUrl.value : "No File Uploaded!"}</i>
                         </label>
-                        {fa_fileUrl.error ? <small className={formStyles.formControlError}>Farsi version is required!</small> : null}
+                        {fa_fileUrl.error ? <small className={formStyles.formControlError}>{fa_fileUrl.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.uploadLabel}>English version *</label>
@@ -248,7 +248,7 @@ export const Form = ({ params }) => {
                             <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onEnFileChanged} />
                             <i className={formStyles.uploadText}>{en_fileUrl.value ? en_fileUrl.value : "No File Uploaded!"}</i>
                         </label>
-                        {en_fileUrl.error ? <small className={formStyles.formControlError}>Farsi version is required!</small> : null}
+                        {en_fileUrl.error ? <small className={formStyles.formControlError}>{en_fileUrl.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.uploadLabel}>German version *</label>
@@ -256,7 +256,7 @@ export const Form = ({ params }) => {
                             <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onDeuFileChanged} />
                             <i className={formStyles.uploadText}>{deu_fileUrl.value ? deu_fileUrl.value : "No File Uploaded!"}</i>
                         </label>
-                        {fa_fileUrl.error ? <small className={formStyles.formControlError}>Farsi version is required!</small> : null}
+                        {deu_fileUrl.error ? <small className={formStyles.formControlError}>{deu_fileUrl.error}</small> : null}
                     </div>
                     <h5 className={formStyles.formSectionTitle}>Tags *</h5>
                     <button type="button" className={commonStyles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Tag" : "Add Tag"}</button>
