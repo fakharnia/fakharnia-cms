@@ -52,7 +52,7 @@ export const Projects = () => {
                             <li key={project._id} className={componentStyles.project}>
                                 <Image className={componentStyles.projectLogo} src={`${previewURL}/project/${project.logoUrl}`} width={500} height={190} alt={project.logoAlt} />
                                 <div className={componentStyles.projectBox}>
-                                    <h5 className={componentStyles.projectName}>{project.name}</h5>
+                                    <h5 className={componentStyles.projectName}>{project.en_name}</h5>
                                     <div className={componentStyles.projectOptions}>
                                         <Link className={componentStyles.projectButton} href={"/dashboard/projects/" + project._id}>Edit</Link>
                                         <button className={componentStyles.projectButton} onClick={() => { onDeleteProject(project._id) }}>Delete</button>

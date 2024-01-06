@@ -23,14 +23,20 @@ export const ProjectForm = ({ params }) => {
     const [innerForm, setInnerForm] = useState(false);
     const [mode, setMode] = useState("create");
 
-    const [_id, setId] = useState({ value: "", errors: [] });
-    const [name, setName] = useState({ value: "", errors: [] });
-    const [priority, setPriority] = useState({ value: "", errors: [] });
-    const [description, setDescription] = useState({ value: "", errors: [] });
-    const [url, setUrl] = useState({ value: "", errors: [] });
-    const [logoAlt, setCoverAlt] = useState({ value: "", errors: [] });
-    const [techDescription, setTechDescription] = useState({ value: "", errors: [] });
+    const [_id, setId] = useState("");
+    const [fa_name, setFa_name] = useState({ value: "", error: "" });
+    const [en_name, setEn_name] = useState({ value: "", error: "" });
+    const [deu_name, setDeu_name] = useState({ value: "", error: "" });
+    const [fa_description, setFa_description] = useState({ value: "", error: "" });
+    const [en_description, setEn_description] = useState({ value: "", error: "" });
+    const [deu_description, setDeu_description] = useState({ value: "", error: "" });
+    const [logoAlt, setLogoAlt] = useState("");
+    const [fa_techDescription, setFa_techDescription] = useState({ value: "", error: "" });
+    const [en_techDescription, setEn_techDescription] = useState({ value: "", error: "" });
+    const [deu_techDescription, setDeu_techDescription] = useState({ value: "", error: "" });
 
+    const [priority, setPriority] = useState("");
+    const [url, setUrl] = useState("");
     const [logoUrl, setLogoUrl] = useState("");
     const [technologies, setTechnologies] = useState([]);
     const [preview, setPreview] = useState("");
@@ -39,13 +45,20 @@ export const ProjectForm = ({ params }) => {
     const fetchProject = async () => {
         const response = await getProject(params.id);;
         setMode(response?._id ? "edit" : "create");
-        setId({ value: response?._id ?? "", errors: [] });
-        setName({ value: response?.name ?? "", errors: [] });
-        setPriority({ value: response?.priority ?? "", errors: [] });
-        setDescription({ value: response?.description ?? "", errors: [] });
-        setUrl({ value: response?.url ?? "", errors: [] });
-        setCoverAlt({ value: response?.logoAlt ?? "", errors: [] });
-        setTechDescription({ value: response?.techDescription ?? "", errors: [] });
+
+        setId(response?._id ?? "");
+        setFa_name({ value: response?.fa_name ?? "", error: "" });
+        setEn_name({ value: response?.en_name ?? "", error: "" });
+        setDeu_name({ value: response?.deu_name ?? "", error: "" });
+        setPriority(response?.priority ?? "");
+        setFa_description({ value: response?.fa_description ?? "", error: "" });
+        setEn_description({ value: response?.en_description ?? "", error: "" });
+        setDeu_description({ value: response?.deu_description ?? "", error: "" });
+        setUrl(response?.url ?? "");
+        setLogoAlt(response?.logoAlt ?? "");
+        setFa_techDescription({ value: response?.fa_techDescription ?? "", error: "" });
+        setEn_techDescription({ value: response?.en_techDescription ?? "", error: "" });
+        setDeu_techDescription({ value: response?.deu_techDescription ?? "", error: "" });
 
         setTechnologies(response?.technologies ?? []);
         setLogoUrl(response?.logoUrl ?? null);
@@ -84,39 +97,104 @@ export const ProjectForm = ({ params }) => {
 
     const formValidation = () => {
         let result = true;
-        if (name.value.length === 0) {
-            setName({ ...name, errors: ["Enter the project name"] });
+        if (fa_name.value.length === 0) {
+            setFa_name({ ...fa_name, error: "Enter the project name" });
             result = false;
         }
-        if (description.value.length === 0) {
-            setDescription({ ...description, errors: ["Enter the project Domain and Main Problem"] });
+        if (en_name.value.length === 0) {
+            setEn_name({ ...en_name, error: "Enter the project name" });
             result = false;
         }
-        if (techDescription.value.length === 0) {
-            setTechDescription({ ...techDescription, errors: ["Enter the project Technologies Description"] });
+        if (deu_name.value.length === 0) {
+            setDeu_name({ ...deu_name, error: "Enter the project name" });
             result = false;
+        }
+        if (fa_description.value.length === 0) {
+            setFa_description({ ...fa_description, error: "Enter the project Domain and Main Problem" });
+            result = false;
+        }
+        if (en_description.value.length === 0) {
+            setEn_description({ ...en_description, error: "Enter the project Domain and Main Problem" });
+            result = false;
+        }
+        if (deu_description.value.length === 0) {
+            setDeu_description({ ...deu_description, error: "Enter the project Domain and Main Problem" });
+            result = false;
+        }
+        if (fa_techDescription.value.length === 0) {
+            setFa_techDescription({ ...fa_techDescription, error: "Enter the project Technologies Description" });
+            result = false;
+        }
+        if (en_techDescription.value.length === 0) {
+            setEn_techDescription({ ...en_techDescription, error: "Enter the project Technologies Description" });
+            result = false;
+        }
+        if (deu_techDescription.value.length === 0) {
+            setDeu_techDescription({ ...deu_techDescription, error: "Enter the project Technologies Description" });
+            result = false;
+        }
+        if (logoUrl.value?.length === 0) {
+            result = false;
+            setLogoUrl({ ...logoUrl, error: "Cover required!" });
         }
         return result;
     }
 
     const onChangeController = (propertyName, value) => {
         switch (propertyName) {
-            case "name":
-                setName({ value: value, errors: [] });
+            case "fa_name":
+                setFa_name({ value: value, error: "" });
                 if (value.length === 0) {
-                    setName({ value: value, errors: ["Enter the project name"] });
+                    setFa_name({ value: value, error: "Enter the project name (Farsi)" });
                 }
                 break;
-            case "description":
-                setDescription({ value: value, errors: [] });
+            case "en_name":
+                setEn_name({ value: value, error: "" });
                 if (value.length === 0) {
-                    setDescription({ value: value, errors: ["Enter the project Domain and Main Problem"] });
+                    setEn_name({ value: value, error: "Enter the project name (English)" });
                 }
                 break;
-            case "techDescription":
-                setTechDescription({ value: value, errors: [] });
+            case "deu_name":
+                setDeu_name({ value: value, error: "" });
                 if (value.length === 0) {
-                    setTechDescription({ value: value, errors: ["Enter the project Technologies Description"] });
+                    setDeu_name({ value: value, error: "Enter the project name (German)" });
+                }
+                break;
+            case "fa_description":
+                setFa_description({ value: value, error: "" });
+                if (value.length === 0) {
+                    setFa_description({ value: value, error: "Enter the project Domain and Main Problem (Farsi)" });
+                }
+                break;
+            case "en_description":
+                setEn_description({ value: value, error: "" });
+                if (value.length === 0) {
+                    setEn_description({ value: value, error: "Enter the project Domain and Main Problem (English)" });
+                }
+                break;
+            case "deu_description":
+                setDeu_description({ value: value, error: "" });
+                if (value.length === 0) {
+                    setDeu_description({ value: value, error: "Enter the project Domain and Main Problem (German)" });
+                }
+                break;
+
+            case "fa_techDescription":
+                setFa_techDescription({ value: value, error: "" });
+                if (value.length === 0) {
+                    setFa_techDescription({ value: value, error: "Enter the project Technologies Description (Farsi)" });
+                }
+                break;
+            case "en_techDescription":
+                setEn_techDescription({ value: value, error: "" });
+                if (value.length === 0) {
+                    setEn_techDescription({ value: value, error: "Enter the project Technologies Description (English)" });
+                }
+                break;
+            case "deu_techDescription":
+                setDeu_techDescription({ value: value, error: "" });
+                if (value.length === 0) {
+                    setDeu_techDescription({ value: value, error: "Enter the project Technologies Description (Farsi)" });
                 }
                 break;
         }
@@ -126,13 +204,19 @@ export const ProjectForm = ({ params }) => {
         event.preventDefault();
         if (formValidation()) {
             const form = new FormData();
-            form.append("_id", _id.value ?? null);
-            form.append("name", name.value ?? null);
-            form.append("priority", priority.value ?? null);
-            form.append("description", description.value ?? null);
-            form.append("url", url.value ?? null);
-            form.append("techDescription", techDescription.value ?? null);
-            form.append("logoAlt", logoAlt.value ?? null);
+            form.append("_id", _id);
+            form.append("fa_name", fa_name.value ?? null);
+            form.append("en_name", en_name.value ?? null);
+            form.append("deu_name", deu_name.value ?? null);
+            form.append("priority", priority);
+            form.append("fa_description", fa_description.value ?? null);
+            form.append("en_description", en_description.value ?? null);
+            form.append("deu_description", deu_description.value ?? null);
+            form.append("url", url);
+            form.append("fa_techDescription", fa_techDescription.value ?? null);
+            form.append("en_techDescription", en_techDescription.value ?? null);
+            form.append("deu_techDescription", deu_techDescription.value ?? null);
+            form.append("logoAlt", logoAlt);
 
             form.append("technologies", JSON.stringify(technologies) ?? []);
             form.append("logoUrl", logoUrl ?? null);
@@ -164,28 +248,50 @@ export const ProjectForm = ({ params }) => {
                     <Link className={commonStyles.pageAddButton} href="/dashboard/projects">Back</Link>
                 </div>
                 <form className={formStyles.form} onSubmit={submitForm}>
+
+                    {/* Name */}
                     <div className={formStyles.formGroup}>
-                        <label className={name.errors.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Name *</label>
-                        <input type="text" className={formStyles.formControl} value={name.value} onChange={(e) => onChangeController("name", e.target.value)} />
-                        {
-                            name.errors.map((error, index) => <small key={"name-error" + index} className={formStyles.formControlError}>{error}</small>)
-                        }
+                        <label className={fa_name.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Farsi Name *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_name.value} onChange={(e) => onChangeController("fa_name", e.target.value)} />
+                        {fa_name.error ? <small className={formStyles.formControlError}>{fa_name.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={description.errors.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem *</label>
-                        <textarea className={formStyles.formControl} value={description.value} onChange={(e) => onChangeController("description", e.target.value)} ></textarea>
-                        {
-                            description.errors.map((error, index) => <small key={"description-error" + index} className={formStyles.formControlError}>{error}</small>)
-                        }
+                        <label className={en_name.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>English Name *</label>
+                        <input type="text" className={formStyles.formControl} value={en_name.value} onChange={(e) => onChangeController("en_name", e.target.value)} />
+                        {en_name.error ? <small className={formStyles.formControlError}>{en_name.error}</small> : null}
                     </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={deu_name.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>German Name *</label>
+                        <input type="text" className={formStyles.formControl} value={deu_name.value} onChange={(e) => onChangeController("deu_name", e.target.value)} />
+                        {deu_name.error ? <small className={formStyles.formControlError}>{deu_name.error}</small> : null}
+                    </div>
+                    {/* Description */}
+                    <div className={formStyles.formGroup}>
+                        <label className={fa_description.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem in Farsi *</label>
+                        <textarea className={formStyles.formControl} value={fa_description.value} onChange={(e) => onChangeController("fa_description", e.target.value)} ></textarea>
+                        {fa_description.error ? <small className={formStyles.formControlError}>{fa_description.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={en_description.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem in English *</label>
+                        <textarea className={formStyles.formControl} value={en_description.value} onChange={(e) => onChangeController("en_description", e.target.value)} ></textarea>
+                        {en_description.error ? <small className={formStyles.formControlError}>{en_description.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={deu_description.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem in German *</label>
+                        <textarea className={formStyles.formControl} value={deu_description.value} onChange={(e) => onChangeController("deu_description", e.target.value)} ></textarea>
+                        {deu_description.error ? <small className={formStyles.formControlError}>{deu_description.error}</small> : null}
+                    </div>
+                    {/* Priority */}
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Priority</label>
-                        <input type="number" className={formStyles.formControl} value={priority.value} onChange={(e) => setPriority({ value: e.target.value, errors: [] })} />
+                        <input type="number" className={formStyles.formControl} value={priority} onChange={(e) => setPriority(e.target.value)} />
                     </div>
+                    {/* Url */}
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>URL</label>
-                        <input type="text" className={formStyles.formControl} value={url.value} onChange={(e) => setUrl({ value: e.target.value, errors: [] })} />
+                        <input type="text" className={formStyles.formControl} value={url} onChange={(e) => setUrl(e.target.value)} />
                     </div>
+                    {/* Logo */}
                     <div className={`${formStyles.formGroup} ${formStyles.formGroupHasButton}`}>
                         {
                             preview ?
@@ -200,16 +306,29 @@ export const ProjectForm = ({ params }) => {
                     </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Logo Alt</label>
-                        <input type="text" className={formStyles.formControl} value={logoAlt.value} onChange={(e) => setCoverAlt({ value: e.target.value, errors: [] })} />
+                        <input type="text" className={formStyles.formControl} value={logoAlt} onChange={(e) => setLogoAlt(e.target.value)} />
                     </div>
-                    <h5 className={formStyles.formSectionTitle}>Technologies</h5>
+
+                    <h5 className={formStyles.formSectionTitle}>Technologies *</h5>
+
+                    {/* Technologies Description */}
                     <div className={formStyles.formGroup}>
-                        <label className={techDescription.errors.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies *</label>
-                        <textarea className={formStyles.formControl} value={techDescription.value} onChange={(e) => onChangeController("techDescription", e.target.value)} ></textarea>
-                        {
-                            techDescription.errors.map((error, index) => <small key={"techDescription-error" + index} className={formStyles.formControlError}>{error}</small>)
-                        }
+                        <label className={fa_techDescription.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies (Farsi) *</label>
+                        <textarea className={formStyles.formControl} value={fa_techDescription.value} onChange={(e) => onChangeController("fa_techDescription", e.target.value)} ></textarea>
+                        {fa_techDescription.error ? <small className={formStyles.formControlError}>{fa_techDescription.error}</small> : null}
                     </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={en_techDescription.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies (English) *</label>
+                        <textarea className={formStyles.formControl} value={en_techDescription.value} onChange={(e) => onChangeController("en_techDescription", e.target.value)} ></textarea>
+                        {en_techDescription.error ? <small className={formStyles.formControlError}>{en_techDescription.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={deu_techDescription.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies (German) *</label>
+                        <textarea className={formStyles.formControl} value={deu_techDescription.value} onChange={(e) => onChangeController("deu_techDescription", e.target.value)} ></textarea>
+                        {deu_techDescription.error ? <small className={formStyles.formControlError}>{deu_techDescription.error}</small> : null}
+                    </div>
+
+                    {/* Technologies List */}
                     <ul className={componentStyles.projectTechList}>
                         {technologies.map((tech, index) => <li key={index} onClick={() => { onRemovedTechnology(tech) }}>{tech.name}</li>)}
                     </ul>
