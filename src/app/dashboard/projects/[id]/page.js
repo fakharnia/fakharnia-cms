@@ -70,7 +70,7 @@ export const ProjectForm = ({ params }) => {
         if (params.id !== "0") {
             fetchProject();
         }
-        changeMenu("/dashboard/designs");
+        changeMenu("/dashboard/projects");
     }, []);
 
     const onInnerFormSubmitted = (tech) => {

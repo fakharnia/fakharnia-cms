@@ -6,7 +6,9 @@ import commonStyles from "../../page.module.css";
 export const SkillForm = ({ onSubmit }) => {
 
     const [title, setTitle] = useState({ value: "", error: "" });
-    const [description, setDescription] = useState({ value: "", error: "" });
+    const [fa_description, setFa_description] = useState({ value: "", error: "" });
+    const [en_description, setEn_description] = useState({ value: "", error: "" });
+    const [deu_description, setDeu_description] = useState({ value: "", error: "" });
     const [priority, setPriority] = useState({ value: "", error: "" });
     const [fileUrl, setFileUrl] = useState({ value: "", error: "" });
     const [rate, setRate] = useState();
@@ -35,16 +37,29 @@ export const SkillForm = ({ onSubmit }) => {
                     setTitle({ value: value, error: "Enter the Title" });
                 }
                 break;
-            case "description":
-                setDescription({ value: value, error: null });
+
+            case "fa_description":
+                setFa_description({ value: value, error: null });
                 if (value.length === 0) {
-                    setDescription({ value: value, error: "Enter the Description Rate" });
+                    setFa_description({ value: value, error: "Enter the Description (Farsi)" });
+                }
+                break;
+            case "en_description":
+                setEn_description({ value: value, error: null });
+                if (value.length === 0) {
+                    setEn_description({ value: value, error: "Enter the Description (English)" });
+                }
+                break;
+            case "deu_description":
+                setDeu_description({ value: value, error: null });
+                if (value.length === 0) {
+                    setDeu_description({ value: value, error: "Enter the Description (German)" });
                 }
                 break;
             case "priority":
                 setPriority({ value: value, error: null });
                 if (isNaN(value) || value === undefined) {
-                    setPriority({ value: value, error: "Enter the Priority Rate" });
+                    setPriority({ value: value, error: "Enter the Priority" });
                 }
                 break;
         }
@@ -56,10 +71,19 @@ export const SkillForm = ({ onSubmit }) => {
             result = false;
             setTitle({ ...title, error: "Title is required!" });
         }
-        if (description.value === "") {
+        if (fa_description.value === "") {
             result = false;
-            setDescription({ ...description, error: "Description is required!" });
+            setFa_description({ ...fa_description, error: "Description is required!" });
         }
+        if (en_description.value === "") {
+            result = enlse;
+            setEn_description({ ...fa_description, error: "Description is required!" });
+        }
+        if (deu_description.value === "") {
+            result = false;
+            setDeu_description({ ...deu_description, error: "Description is required!" });
+        }
+
         if (isNaN(priority.value) || priority.value === undefined) {
             result = false;
             setPriority({ ...readingRate, error: "Priority is required!" });
@@ -74,7 +98,9 @@ export const SkillForm = ({ onSubmit }) => {
             const data = {
                 _id: null,
                 title: title.value,
-                description: description.value,
+                fa_description: fa_description.value,
+                en_description: en_description.value,
+                deu_description: deu_description.value,
                 priority: priority.value,
                 fileUrl: fileUrl.value,
                 file: selectedFile,
@@ -98,9 +124,19 @@ export const SkillForm = ({ onSubmit }) => {
                     {title.error ? <small className={formStyles.formControlError}>{title.error}</small> : null}
                 </div>
                 <div className={formStyles.formGroup}>
-                    <label className={formStyles.formLabel}>Description *</label>
-                    <textarea className={formStyles.formControl} value={description.value} onChange={(e) => onChangeController("description", e.target.value)} ></textarea>
-                    {description.error ? <small className={formStyles.formControlError}>{description.error}</small> : null}
+                    <label className={formStyles.formLabel}>Farsi Description *</label>
+                    <textarea className={formStyles.formControl} value={fa_description.value} onChange={(e) => onChangeController("fa_description", e.target.value)} ></textarea>
+                    {fa_description.error ? <small className={formStyles.formControlError}>{fa_description.error}</small> : null}
+                </div>
+                <div className={formStyles.formGroup}>
+                    <label className={formStyles.formLabel}>English Description *</label>
+                    <textarea className={formStyles.formControl} value={en_description.value} onChange={(e) => onChangeController("en_description", e.target.value)} ></textarea>
+                    {en_description.error ? <small className={formStyles.formControlError}>{en_description.error}</small> : null}
+                </div>
+                <div className={formStyles.formGroup}>
+                    <label className={formStyles.formLabel}>German Description *</label>
+                    <textarea className={formStyles.formControl} value={deu_description.value} onChange={(e) => onChangeController("deu_description", e.target.value)} ></textarea>
+                    {deu_description.error ? <small className={formStyles.formControlError}>{deu_description.error}</small> : null}
                 </div>
                 <div className={formStyles.formGroup}>
                     <label className={formStyles.formLabel}>Priority *</label>

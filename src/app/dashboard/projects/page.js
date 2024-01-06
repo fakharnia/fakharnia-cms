@@ -6,12 +6,14 @@ import Image from "next/image";
 import commonStyles from "../page.module.css";
 import componentStyles from "./page.module.css";
 import { useDashboardMessage } from "../context/messageContext";
+import { useMenu } from "@/app/context/menuContext";
 import { getsAction, deleteAction } from "./action";
 
 export const Projects = () => {
     const previewURL = process.env.NEXT_PUBLIC_API_STATIC_ENDPOINT;
 
     const { addMessage, cancel } = useDashboardMessage();
+    const { changeMenu } = useMenu();
     const [projects, setProjects] = useState([]);
 
     const onDeleteProject = async (projectId) => {
@@ -35,6 +37,7 @@ export const Projects = () => {
 
     useEffect(() => {
         fetchProjects();
+        changeMenu("/dashboard/projects");
     }, [])
 
     return (

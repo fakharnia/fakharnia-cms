@@ -24,10 +24,18 @@ const Resume = () => {
 
     // Form properties
     const [_id, setId] = useState("");
-    const [aboutMe, setAboutMe] = useState({ value: "", error: "" });
-    const [text, setText] = useState({ value: "", error: "" });
-    const [education, setEducation] = useState({ value: "", error: "" });
-    const [hobbies, setHobbies] = useState("");
+    const [fa_aboutMe, setFa_aboutMe] = useState({ value: "", error: "" });
+    const [en_aboutMe, setEn_aboutMe] = useState({ value: "", error: "" });
+    const [deu_aboutMe, setDeu_aboutMe] = useState({ value: "", error: "" });
+    const [fa_text, setFa_text] = useState({ value: "", error: "" });
+    const [en_text, setEn_text] = useState({ value: "", error: "" });
+    const [deu_text, setDeu_text] = useState({ value: "", error: "" });
+    const [fa_education, setFa_education] = useState({ value: "", error: "" });
+    const [en_education, setEn_education] = useState({ value: "", error: "" });
+    const [deu_education, setDeu_education] = useState({ value: "", error: "" });
+    const [fa_hobbies, setFa_hobbies] = useState("");
+    const [en_hobbies, setEn_hobbies] = useState("");
+    const [deu_hobbies, setDeu_hobbies] = useState("");
     const [fileUrl, setFileUrl] = useState({ value: "", error: "" });
     const [selectedFile, setSelectedFile] = useState("");
     const [avatarUrl, setAvatarUrl] = useState({ value: "", error: "" });
@@ -50,10 +58,18 @@ const Resume = () => {
     const fetchResume = async () => {
         const response = await getAction()
         setId(response?._id ?? "");
-        setAboutMe({ value: response?.aboutMe ?? "", error: "" });
-        setText({ value: response?.text ?? "", error: "" });
-        setEducation({ value: response?.education ?? "", error: "" });
-        setHobbies(response?.hobbies ?? "");
+        setFa_aboutMe({ value: response?.fa_aboutMe ?? "", error: "" });
+        setEn_aboutMe({ value: response?.en_aboutMe ?? "", error: "" });
+        setDeu_aboutMe({ value: response?.deu_aboutMe ?? "", error: "" });
+        setFa_text({ value: response?.fa_text ?? "", error: "" });
+        setEn_text({ value: response?.en_text ?? "", error: "" });
+        setDeu_text({ value: response?.deu_text ?? "", error: "" });
+        setFa_education({ value: response?.fa_education ?? "", error: "" });
+        setEn_education({ value: response?.en_education ?? "", error: "" });
+        setDeu_education({ value: response?.deu_education ?? "", error: "" });
+        setFa_hobbies(response?.fa_hobbies ?? "");
+        setEn_hobbies(response?.en_hobbies ?? "");
+        setDeu_hobbies(response?.deu_hobbies ?? "");
         setFileUrl({ value: response?.fileUrl ?? "", error: "" });
         setAvatarUrl({ value: response?.avatarUrl ?? "", error: "" });
         setSelectedFile(null);
@@ -75,7 +91,9 @@ const Resume = () => {
         if (data) {
             setSkills([...skills, {
                 title: data.title,
-                description: data.description,
+                fa_description: data.fa_description,
+                en_description: data.en_description,
+                deu_description: data.deu_description,
                 priority: data.priority,
                 rate: data.rate,
                 fileUrl: data.fileUrl,
@@ -165,22 +183,58 @@ const Resume = () => {
 
     const onChangeController = (propertyName, value) => {
         switch (propertyName) {
-            case "aboutMe":
-                setAboutMe({ value: value, error: null });
+            case "fa_aboutMe":
+                setFa_aboutMe({ value: value, error: null });
                 if (value.length === 0) {
-                    setAboutMe({ value: value, error: "Enter the About Me" });
+                    setFa_aboutMe({ value: value, error: "Enter the About Me (Farsi)" });
                 }
                 break;
-            case "text":
-                setText({ value: value, error: null });
+            case "en_aboutMe":
+                setEn_aboutMe({ value: value, error: null });
                 if (value.length === 0) {
-                    setText({ value: value, error: "Enter the Text" });
+                    setEn_aboutMe({ value: value, error: "Enter the About Me (English)" });
                 }
                 break;
-            case "education":
-                setEducation({ value: value, error: null });
+            case "deu_aboutMe":
+                setDeu_aboutMe({ value: value, error: null });
                 if (value.length === 0) {
-                    setEducation({ value: value, error: "Enter the Education" });
+                    setDeu_aboutMe({ value: value, error: "Enter the About Me (German)" });
+                }
+                break;
+            case "fa_text":
+                setFa_text({ value: value, error: null });
+                if (value.length === 0) {
+                    setFa_text({ value: value, error: "Enter the Text (Farsi)" });
+                }
+                break;
+            case "en_text":
+                setEn_text({ value: value, error: null });
+                if (value.length === 0) {
+                    setEn_text({ value: value, error: "Enter the Text (English)" });
+                }
+                break;
+            case "deu_text":
+                setDeu_text({ value: value, error: null });
+                if (value.length === 0) {
+                    setDeu_text({ value: value, error: "Enter the Text (German)" });
+                }
+                break;
+            case "fa_education":
+                setFa_education({ value: value, error: null });
+                if (value.length === 0) {
+                    setFa_education({ value: value, error: "Enter the Education (Farsi)" });
+                }
+                break;
+            case "en_education":
+                setEn_education({ value: value, error: null });
+                if (value.length === 0) {
+                    setEn_education({ value: value, error: "Enter the Education (English)" });
+                }
+                break;
+            case "deu_education":
+                setDeu_education({ value: value, error: null });
+                if (value.length === 0) {
+                    setDeu_education({ value: value, error: "Enter the Education (German)" });
                 }
                 break;
         }
@@ -194,19 +248,43 @@ const Resume = () => {
             setFileUrl({ ...fileUrl, error: "Resume File is required!" });
         }
 
-        if (!aboutMe.value || aboutMe.value.length === 0) {
+        if (!fa_aboutMe.value || fa_aboutMe.value.length === 0) {
             result = false;
-            setFileUrl({ ...aboutMe, error: "About Me is required!" });
+            setFa_aboutMe({ ...fa_aboutMe, error: "About Me is required!" });
+        }
+        if (!en_aboutMe.value || en_aboutMe.value.length === 0) {
+            result = false;
+            setEn_aboutMe({ ...en_aboutMe, error: "About Me is required!" });
+        }
+        if (!deu_aboutMe.value || deu_aboutMe.value.length === 0) {
+            result = false;
+            setDeu_aboutMe({ ...deu_aboutMe, error: "About Me is required!" });
         }
 
-        if (!text.value || text.value.length === 0) {
+        if (!fa_text.value || fa_text.value.length === 0) {
             result = false;
-            setFileUrl({ ...text, error: "Text is required!" });
+            setFa_text({ ...fa_text, error: "Text is required!" });
+        }
+        if (!en_text.value || en_text.value.length === 0) {
+            result = false;
+            setEn_text({ ...en_text, error: "Text is required!" });
+        }
+        if (!deu_text.value || deu_text.value.length === 0) {
+            result = false;
+            setDeu_text({ ...deu_text, error: "Text is required!" });
         }
 
-        if (!education.value || education.value.length === 0) {
+        if (!fa_education.value || fa_education.value.length === 0) {
             result = false;
-            setFileUrl({ ...education, error: "Education is required!" });
+            setFa_education({ ...fa_education, error: "Education is required!" });
+        }
+        if (!en_education.value || en_education.value.length === 0) {
+            result = false;
+            setEn_education({ ...en_education, error: "Education is required!" });
+        }
+        if (!deu_education.value || deu_education.value.length === 0) {
+            result = false;
+            setDeu_education({ ...deu_education, error: "Education is required!" });
         }
 
         if (!avatarUrl.value || avatarUrl.value.length === 0) {
@@ -222,10 +300,18 @@ const Resume = () => {
         if (formValidation()) {
             const form = new FormData();
             form.append("_id", _id ?? null);
-            form.append("aboutMe", aboutMe.value ?? null);
-            form.append("text", text.value ?? null);
-            form.append("education", education.value ?? null);
-            form.append("hobbies", hobbies ?? null);
+            form.append("fa_aboutMe", fa_aboutMe.value ?? null);
+            form.append("en_aboutMe", en_aboutMe.value ?? null);
+            form.append("deu_aboutMe", deu_aboutMe.value ?? null);
+            form.append("fa_text", fa_text.value ?? null);
+            form.append("en_text", en_text.value ?? null);
+            form.append("deu_text", deu_text.value ?? null);
+            form.append("fa_education", fa_education.value ?? null);
+            form.append("en_education", en_education.value ?? null);
+            form.append("deu_education", deu_education.value ?? null);
+            form.append("fa_hobbies", fa_hobbies ?? null);
+            form.append("en_hobbies", en_hobbies ?? null);
+            form.append("deu_hobbies", deu_hobbies ?? null);
             form.append("fileUrl", fileUrl.value);
             form.append("avatarUrl", avatarUrl.value);
             form.append("fileChanged", fileChanged);
@@ -236,7 +322,9 @@ const Resume = () => {
             const skls = skills.map(skl => ({
                 _id: skl?._id,
                 title: skl.title,
-                description: skl.description,
+                fa_description: skl.fa_description,
+                en_description: skl.en_description,
+                deu_description: skl.deu_description,
                 priority: skl.priority,
                 rate: skl.rate,
                 fileUrl: skl.fileUrl,
@@ -298,25 +386,71 @@ const Resume = () => {
                         </label>
                         {fileUrl.error ? <small className={formStyles.formControlError}>File is required!</small> : null}
                     </div>
+                    {/* About Me */}
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>About Me *</label>
-                        <textarea className={formStyles.formControl} value={aboutMe.value} onChange={(e) => onChangeController("aboutMe", e.target.value)} ></textarea>
-                        {aboutMe.error ? <small className={formStyles.formControlError}>About Me is required!</small> : null}
+                        <label className={formStyles.formLabel}>About Me (Farsi) *</label>
+                        <textarea className={formStyles.formControl} value={fa_aboutMe.value} onChange={(e) => onChangeController("fa_aboutMe", e.target.value)} ></textarea>
+                        {fa_aboutMe.error ? <small className={formStyles.formControlError}>{fa_aboutMe.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Text *</label>
-                        <textarea className={formStyles.formControl} value={text.value} onChange={(e) => onChangeController("text", e.target.value)} ></textarea>
-                        {text.error ? <small className={formStyles.formControlError}>Text is required!</small> : null}
+                        <label className={formStyles.formLabel}>About Me (English) *</label>
+                        <textarea className={formStyles.formControl} value={en_aboutMe.value} onChange={(e) => onChangeController("en_aboutMe", e.target.value)} ></textarea>
+                        {en_aboutMe.error ? <small className={formStyles.formControlError}>{en_aboutMe.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Education *</label>
-                        <input type="text" className={formStyles.formControl} value={education.value} onChange={(e) => onChangeController("education", e.target.value)} />
-                        {education.error ? <small className={formStyles.formControlError}>{education.error}</small> : null}
+                        <label className={formStyles.formLabel}>About Me (German) *</label>
+                        <textarea className={formStyles.formControl} value={deu_aboutMe.value} onChange={(e) => onChangeController("deu_aboutMe", e.target.value)} ></textarea>
+                        {deu_aboutMe.error ? <small className={formStyles.formControlError}>{deu_aboutMe.error}</small> : null}
+                    </div>
+
+                    {/* Text */}
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Farsi Text *</label>
+                        <textarea className={formStyles.formControl} value={fa_text.value} onChange={(e) => onChangeController("fa_text", e.target.value)} ></textarea>
+                        {fa_text.error ? <small className={formStyles.formControlError}>{fa_text.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Hobbies</label>
-                        <textarea className={formStyles.formControl} value={hobbies} onChange={(e) => setHobbies(e.target.value)} ></textarea>
+                        <label className={formStyles.formLabel}>English Text *</label>
+                        <textarea className={formStyles.formControl} value={en_text.value} onChange={(e) => onChangeController("en_text", e.target.value)} ></textarea>
+                        {en_text.error ? <small className={formStyles.formControlError}>{en_text.error}</small> : null}
                     </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>German Text *</label>
+                        <textarea className={formStyles.formControl} value={deu_text.value} onChange={(e) => onChangeController("deu_text", e.target.value)} ></textarea>
+                        {deu_text.error ? <small className={formStyles.formControlError}>{deu_text.error}</small> : null}
+                    </div>
+
+                    {/* Education */}
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Education (Farsi) *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_education.value} onChange={(e) => onChangeController("fa_education", e.target.value)} />
+                        {fa_education.error ? <small className={formStyles.formControlError}>{fa_education.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Education (English) *</label>
+                        <input type="text" className={formStyles.formControl} value={en_education.value} onChange={(e) => onChangeController("en_education", e.target.value)} />
+                        {en_education.error ? <small className={formStyles.formControlError}>{en_education.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Education (German) *</label>
+                        <input type="text" className={formStyles.formControl} value={deu_education.value} onChange={(e) => onChangeController("deu_education", e.target.value)} />
+                        {deu_education.error ? <small className={formStyles.formControlError}>{deu_education.error}</small> : null}
+                    </div>
+
+                    {/* Hobbies */}
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Hobbies (Farsi)</label>
+                        <textarea className={formStyles.formControl} value={fa_hobbies} onChange={(e) => setFa_hobbies(e.target.value)} ></textarea>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Hobbies (English)</label>
+                        <textarea className={formStyles.formControl} value={en_hobbies} onChange={(e) => setEn_hobbies(e.target.value)} ></textarea>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Hobbies (German)</label>
+                        <textarea className={formStyles.formControl} value={deu_hobbies} onChange={(e) => setDeu_hobbies(e.target.value)} ></textarea>
+                    </div>
+
                     <div className={`${formStyles.formGroup} ${formStyles.formGroupHasButton}`}>
                         <label className={formStyles.formLabel}>Avatar *</label>
                         {
@@ -341,7 +475,7 @@ const Resume = () => {
                                     <Image width={100} height={100} className={formStyles.imagePreview} src={skill.preview ? skill.preview : `${previewURL}/resume/${skill.fileUrl}`} alt="Preview" />
                                     <div>
                                         <p>{skill.title}</p>
-                                        <p>{skill.description}</p>
+                                        <p>{skill.en_description}</p>
                                         <small>priority-{skill.priority} | Rate-{skill.rate}</small>
                                     </div>
 
