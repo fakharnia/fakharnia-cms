@@ -1,0 +1,86 @@
+.postsList {
+    display   : flex;
+    flex-flow : row wrap;
+    width     : 100%;
+    margin-top: 10px;
+}
+
+.post {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+    padding  : 0 15px;
+    margin   : 10px 0;
+}
+
+.postImage {
+    background: var(--color-dark-a);
+    width     : 100%;
+    height    : 190px;
+}
+
+.postTitle {
+    width      : 100%;
+    height     : 40px;
+    margin     : 10px 0;
+    color      : var(--color-light-a);
+    font-size  : 22px;
+    line-height: 40px;
+}
+
+.postDescription {
+    width: 100%;
+}
+
+.postDescription * {
+    color      : var(--color-light-a);
+    text-align : justify;
+    line-height: 40px;
+}
+
+.postOptions {
+    display   : flex;
+    flex-flow : row wrap;
+    margin-top: 20px;
+}
+
+.postButton {
+    background  : var(--color-dark-a);
+    width       : 100px;
+    height      : 40px;
+    margin-right: 10px;
+    color       : var(--color-light-a);
+    font-size   : 18px;
+    line-height : 40px;
+    text-align  : center;
+}
+
+.noData {
+    width      : 100%;
+    height     : 50px;
+    margin-top : 20px;
+    color      : var(--color-light-a);
+    text-align : center;
+    line-height: 40px;
+}
+
+
+.postTagsList {
+    display  : flex;
+    flex-flow: row wrap;
+    width    : 100%;
+    padding  : 0 10px;
+    margin   : 10px 0;
+}
+
+.postTagsList>li {
+    background  : var(--color-dark-a);
+    padding     : 0 10px;
+    height      : 40px;
+    margin      : 5px 0;
+    margin-right: 5px;
+    color       : var(--color-light-a);
+    line-height : 40px;
+    font-size   : 18px;
+    cursor: pointer;
+}

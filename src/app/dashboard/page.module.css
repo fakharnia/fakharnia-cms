@@ -228,15 +228,21 @@
 }
 
 .postWidget>ul>li>div.options {
-    width: 100px;
+    width        : 100px;
+    display      : flex;
+    flex-flow    : row wrap;
+    align-content: flex-start;
 }
 
-.postWidget>ul>li>div.options>button {
-    background: var(--color-dark-a);
-    width     : 100%;
-    height    : 40px;
-    margin    : 5px 0;
-    color     : var(--color-light-a);
+.postWidget>ul>li>div.options>button,
+.postWidget>ul>li>div.options>a {
+    background : var(--color-dark-a);
+    width      : 100%;
+    height     : 40px;
+    margin     : 5px 0;
+    text-align : center;
+    line-height: 40px;
+    color      : var(--color-light-a);
 }
 
 .chatWidget,
