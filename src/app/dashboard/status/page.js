@@ -21,8 +21,12 @@ const Status = () => {
 
     // Form properties
     const [_id, setId] = useState("");
-    const [dailyText, setDailyText] = useState("");
-    const [title, setTitle] = useState("");
+    const [fa_text, setFa_text] = useState("");
+    const [en_text, setEn_text] = useState("");
+    const [deu_text, setDeu_text] = useState("");
+    const [fa_status, setFa_status] = useState("");
+    const [en_status, setEn_status] = useState("");
+    const [deu_status, setDeu_status] = useState("");
     const [state, setState] = useState("");
     const [avatarUrl, setAvatarUrl] = useState("");
     const [preview, setPreview] = useState(null);
@@ -32,8 +36,12 @@ const Status = () => {
     const fetChStatus = async () => {
         const response = await getStatus()
         setId(response?._id ?? "");
-        setDailyText(response?.dailyText ?? "");
-        setTitle(response?.title ?? "");
+        setFa_text(response?.fa_text ?? "");
+        setEn_text(response?.en_text ?? "");
+        setDeu_text(response?.deu_text ?? "");
+        setFa_status(response?.fa_status ?? "");
+        setEn_status(response?.en_status ?? "");
+        setDeu_status(response?.deu_status ?? "");
         setState(response?.state ?? "");
         setAvatarUrl(response?.avatarUrl ?? "");
         setPreview(response?.avatarUrl ? `${previewURL}/avatar/${response?.avatarUrl}` : null);
@@ -78,8 +86,12 @@ const Status = () => {
         if (formValidation()) {
             const form = new FormData();
             form.append("_id", _id ?? null);
-            form.append("dailyText", dailyText ?? null);
-            form.append("title", title ?? null);
+            form.append("fa_text", fa_text ?? null);
+            form.append("en_text", en_text ?? null);
+            form.append("deu_text", deu_text ?? null);
+            form.append("fa_status", fa_status ?? null);
+            form.append("en_status", en_status ?? null);
+            form.append("deu_status", fa_status ?? null);
             form.append("state", state ?? null);
             form.append("avatarUrl", avatarUrl ?? null);
             form.append('avatar', selectedFile ?? null);
@@ -112,12 +124,28 @@ const Status = () => {
                 </div>
                 <form className={formStyles.form} onSubmit={submitForm}>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Daily Text</label>
-                        <textarea className={formStyles.formControl} value={dailyText} onChange={(e) => setDailyText(e.target.value)} ></textarea>
+                        <label className={formStyles.formLabel}>Daily Text (Farsi)</label>
+                        <textarea className={formStyles.formControl} value={fa_text} onChange={(e) => setFa_text(e.target.value)} ></textarea>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Title</label>
-                        <input type="text" className={formStyles.formControl} value={title} onChange={(e) => setTitle(e.target.value)} />
+                        <label className={formStyles.formLabel}>Daily Text (English)</label>
+                        <textarea className={formStyles.formControl} value={en_text} onChange={(e) => setEn_text(e.target.value)} ></textarea>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Daily Text (German)</label>
+                        <textarea className={formStyles.formControl} value={deu_text} onChange={(e) => setDeu_text(e.target.value)} ></textarea>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Status (Farsi)</label>
+                        <input type="text" className={formStyles.formControl} value={fa_status} onChange={(e) => setFa_status(e.target.value)} />
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Status (English)</label>
+                        <input type="text" className={formStyles.formControl} value={en_status} onChange={(e) => setEn_status(e.target.value)} />
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Status (German)</label>
+                        <input type="text" className={formStyles.formControl} value={deu_status} onChange={(e) => setDeu_status(e.target.value)} />
                     </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>state</label>
