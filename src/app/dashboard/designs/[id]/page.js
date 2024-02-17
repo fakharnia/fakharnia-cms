@@ -24,8 +24,13 @@ export const Form = ({ params }) => {
 
     // Form properties
     const [_id, setId] = useState("");
-    const [title, setTitle] = useState({ value: "", error: "" });
-    const [description, setDescription] = useState({ value: "", error: "" });
+    const [fa_title, setFaTitle] = useState({ value: "", error: "" });
+    const [en_title, setEnTitle] = useState({ value: "", error: "" });
+    const [deu_title, setDeuTitle] = useState({ value: "", error: "" });
+    const [key, setKey] = useState({ value: "", error: "" });
+    const [fa_description, setFaDescription] = useState({ value: "", error: "" });
+    const [en_description, setEnDescription] = useState({ value: "", error: "" });
+    const [deu_description, setDeuDescription] = useState({ value: "", error: "" });
     const [priority, setPriority] = useState({ value: "", error: "" });
     const [images, setImages] = useState({ value: [], error: "" });
     const [deletedImages, setDeletedImages] = useState([]);
@@ -34,9 +39,14 @@ export const Form = ({ params }) => {
         try {
             const response = await getAction(params.id)
             setId(response?._id ?? "");
-            setTitle({ value: response?.title ?? "", error: "" });
+            setFaTitle({ value: response?.fa_title ?? "", error: "" });
+            setEnTitle({ value: response?.en_title ?? "", error: "" });
+            setDeuTitle({ value: response?.deu_title ?? "", error: "" });
+            setKey({ value: response?.key ?? "", error: "" });
             setPriority({ value: response?.priority ?? "", error: "" });
-            setDescription({ value: response?.description ?? "", error: "" });
+            setFaDescription({ value: response?.fa_description ?? "", error: "" });
+            setEnDescription({ value: response?.en_description ?? "", error: "" });
+            setDeuDescription({ value: response?.deu_description ?? "", error: "" });
             setImages({ value: response?.images ?? [], error: "" });
             setMode(response?._id ? "edit" : "create");
         } catch (error) {
@@ -75,8 +85,13 @@ export const Form = ({ params }) => {
             const form = new FormData();
             const imagesData = images.value.map(img => ({ _id: img._id, priority: img.priority, fileAlt: img.fileAlt, fileUrl: img.fileUrl, isCover: img.isCover }));
             form.append("_id", _id ?? null);
-            form.append("title", title.value ?? null);
-            form.append("description", description.value ?? null);
+            form.append("fa_title", fa_title.value ?? null);
+            form.append("en_title", en_title.value ?? null);
+            form.append("deu_title", deu_title.value ?? null);
+            form.append("key", key.value ?? null);
+            form.append("fa_description", fa_description.value ?? null);
+            form.append("en_description", en_description.value ?? null);
+            form.append("deu_description", deu_description.value ?? null);
             form.append("priority", priority.value ?? null);
             form.append("imagesData", JSON.stringify(imagesData))
             form.append("deletedImages", JSON.stringify(deletedImages));
@@ -113,14 +128,42 @@ export const Form = ({ params }) => {
                 </div>
                 <form className={formStyles.form} onSubmit={submitForm}>
                     <div className={formStyles.formGroup}>
-                        <label className={title.error ? formStyles.formLabelError : formStyles.formLabel}>Title *</label>
-                        <input type="text" className={formStyles.formControl} value={title.value} onChange={(e) => setTitle({ value: e.target.value, error: "" })} />
-                        <small className={formStyles.formControlError}>{title.error}</small>
+                        <label className={fa_title.error ? formStyles.formLabelError : formStyles.formLabel}>Farsi Title *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_title.value} onChange={(e) => setFaTitle({ value: e.target.value, error: "" })} />
+                        <small className={formStyles.formControlError}>{fa_title.error}</small>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={description.error.length ? formStyles.formLabelError : formStyles.formLabel}>Description *</label>
-                        <textarea className={formStyles.formControl} value={description.value} onChange={(e) => setDescription({ value: e.target.value, error: "" })} ></textarea>
-                        <small className={formStyles.formControlError}>{description.error}</small>
+                        <label className={en_title.error ? formStyles.formLabelError : formStyles.formLabel}>English Title *</label>
+                        <input type="text" className={formStyles.formControl} value={en_title.value} onChange={(e) => setEnTitle({ value: e.target.value, error: "" })} />
+                        <small className={formStyles.formControlError}>{en_title.error}</small>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={deu_title.error ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Title *</label>
+                        <input type="text" className={formStyles.formControl} value={deu_title.value} onChange={(e) => setDeuTitle({ value: e.target.value, error: "" })} />
+                        <small className={formStyles.formControlError}>{deu_title.error}</small>
+                    </div>
+
+                    <div className={formStyles.formGroup}>
+                        <label className={key.error ? formStyles.formLabelError : formStyles.formLabel}>Key *</label>
+                        <input type="text" className={formStyles.formControl} value={key.value} onChange={(e) => setKey({ value: e.target.value, error: "" })} />
+                        <small className={formStyles.formControlError}>{key.error}</small>
+                    </div>
+
+
+                    <div className={formStyles.formGroup}>
+                        <label className={fa_description.error.length ? formStyles.formLabelError : formStyles.formLabel}>Farsi Description *</label>
+                        <textarea className={formStyles.formControl} value={fa_description.value} onChange={(e) => setFaDescription({ value: e.target.value, error: "" })} ></textarea>
+                        <small className={formStyles.formControlError}>{fa_description.error}</small>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={en_description.error.length ? formStyles.formLabelError : formStyles.formLabel}>English Description *</label>
+                        <textarea className={formStyles.formControl} value={en_description.value} onChange={(e) => setEnDescription({ value: e.target.value, error: "" })} ></textarea>
+                        <small className={formStyles.formControlError}>{en_description.error}</small>
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={deu_description.error.length ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Description *</label>
+                        <textarea className={formStyles.formControl} value={deu_description.value} onChange={(e) => setDeuDescription({ value: e.target.value, error: "" })} ></textarea>
+                        <small className={formStyles.formControlError}>{deu_description.error}</small>
                     </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Priority *</label>

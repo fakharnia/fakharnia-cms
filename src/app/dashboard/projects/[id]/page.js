@@ -27,6 +27,7 @@ export const ProjectForm = ({ params }) => {
     const [fa_name, setFa_name] = useState({ value: "", error: "" });
     const [en_name, setEn_name] = useState({ value: "", error: "" });
     const [deu_name, setDeu_name] = useState({ value: "", error: "" });
+    const [key, setKey] = useState({ value: "", error: "" });
     const [fa_description, setFa_description] = useState({ value: "", error: "" });
     const [en_description, setEn_description] = useState({ value: "", error: "" });
     const [deu_description, setDeu_description] = useState({ value: "", error: "" });
@@ -37,10 +38,13 @@ export const ProjectForm = ({ params }) => {
 
     const [priority, setPriority] = useState("");
     const [url, setUrl] = useState("");
-    const [logoUrl, setLogoUrl] = useState("");
+    const [lightLogoUrl, setLightLogoUrl] = useState("");
+    const [darkLogoUrl, setDarkLogoUrl] = useState("");
     const [technologies, setTechnologies] = useState([]);
-    const [preview, setPreview] = useState("");
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [lightPreview, setLightPreview] = useState("");
+    const [darkPreview, setDarkPreview] = useState("");
+    const [selectedLightFile, setSelectedLightFile] = useState(null);
+    const [selectedDarkFile, setSelectedDarkFile] = useState(null);
 
     const fetchProject = async () => {
         const response = await getProject(params.id);;
@@ -50,6 +54,7 @@ export const ProjectForm = ({ params }) => {
         setFa_name({ value: response?.fa_name ?? "", error: "" });
         setEn_name({ value: response?.en_name ?? "", error: "" });
         setDeu_name({ value: response?.deu_name ?? "", error: "" });
+        setKey({ value: response?.key ?? "", error: "" });
         setPriority(response?.priority ?? "");
         setFa_description({ value: response?.fa_description ?? "", error: "" });
         setEn_description({ value: response?.en_description ?? "", error: "" });
@@ -61,9 +66,12 @@ export const ProjectForm = ({ params }) => {
         setDeu_techDescription({ value: response?.deu_techDescription ?? "", error: "" });
 
         setTechnologies(response?.technologies ?? []);
-        setLogoUrl(response?.logoUrl ?? null);
-        setPreview(response?.logoUrl ? `${previewURL}/project/${response?.logoUrl}` : null);
-        setSelectedFile(null);
+        setLightLogoUrl(response?.lightLogoUrl ?? null);
+        setLightPreview(response?.lightLogoUrl ? `${previewURL}/project/${response?.lightLogoUrl}` : null);
+        setDarkLogoUrl(response?.darkLogoUrl ?? null);
+        setDarkPreview(response?.darkLogoUrl ? `${previewURL}/project/${response?.darkLogoUrl}` : null);
+        setSelectedLightFile(null);
+        setSelectedDarkFile(null);
     }
 
     useEffect(() => {
@@ -78,14 +86,27 @@ export const ProjectForm = ({ params }) => {
         setInnerForm(false);
     }
 
-    const onFileChanged = (event) => {
+    const onLightFileChanged = (event) => {
         const file = event.target.files[0];
         if (file) {
-            setSelectedFile(file);
-            setLogoUrl(file.name);
+            setSelectedLightFile(file);
+            setLightLogoUrl(file.name);
             const reader = new FileReader();
             reader.onload = (e) => {
-                setPreview(e.target.result);
+                setLightPreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const onDarkFileChanged = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedDarkFile(file);
+            setDarkLogoUrl(file.name);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setDarkPreview(e.target.result);
             };
             reader.readAsDataURL(file);
         }
@@ -107,6 +128,10 @@ export const ProjectForm = ({ params }) => {
         }
         if (deu_name.value.length === 0) {
             setDeu_name({ ...deu_name, error: "Enter the project name" });
+            result = false;
+        }
+        if (key.value.length === 0) {
+            setKey({ ...key, error: "Enter the project key" });
             result = false;
         }
         if (fa_description.value.length === 0) {
@@ -133,9 +158,12 @@ export const ProjectForm = ({ params }) => {
             setDeu_techDescription({ ...deu_techDescription, error: "Enter the project Technologies Description" });
             result = false;
         }
-        if (logoUrl.value?.length === 0) {
+        if (lightLogoUrl.length === 0) {
             result = false;
-            setLogoUrl({ ...logoUrl, error: "Cover required!" });
+        }
+        console.log(darkLogoUrl.length);
+        if (darkLogoUrl.length === 0) {
+            result = false;
         }
         return result;
     }
@@ -158,6 +186,12 @@ export const ProjectForm = ({ params }) => {
                 setDeu_name({ value: value, error: "" });
                 if (value.length === 0) {
                     setDeu_name({ value: value, error: "Enter the project name (German)" });
+                }
+                break;
+            case "key":
+                setKey({ value: value, error: "" });
+                if (value.length === 0) {
+                    setKey({ value: value, error: "Enter the project key" });
                 }
                 break;
             case "fa_description":
@@ -208,6 +242,7 @@ export const ProjectForm = ({ params }) => {
             form.append("fa_name", fa_name.value ?? null);
             form.append("en_name", en_name.value ?? null);
             form.append("deu_name", deu_name.value ?? null);
+            form.append("key", key.value ?? null);
             form.append("priority", priority);
             form.append("fa_description", fa_description.value ?? null);
             form.append("en_description", en_description.value ?? null);
@@ -219,9 +254,12 @@ export const ProjectForm = ({ params }) => {
             form.append("logoAlt", logoAlt);
 
             form.append("technologies", JSON.stringify(technologies) ?? []);
-            form.append("logoUrl", logoUrl ?? null);
-            form.append('logo', selectedFile ?? null);
-            form.append("logoChanged", selectedFile ? true : false);
+            form.append("lightLogoUrl", lightLogoUrl ?? null);
+            form.append("darkLogoUrl", darkLogoUrl ?? null);
+            form.append('lightLogo', selectedLightFile ?? null);
+            form.append('darkLogo', selectedDarkFile ?? null);
+            form.append("lightLogoChanged", selectedLightFile ? true : false);
+            form.append("darkLogoChanged", selectedDarkFile ? true : false);
 
             try {
                 const result = mode === "create" ? await createAction(form) : await updateAction(form);
@@ -265,6 +303,13 @@ export const ProjectForm = ({ params }) => {
                         <input type="text" className={formStyles.formControl} value={deu_name.value} onChange={(e) => onChangeController("deu_name", e.target.value)} />
                         {deu_name.error ? <small className={formStyles.formControlError}>{deu_name.error}</small> : null}
                     </div>
+
+                    <div className={formStyles.formGroup}>
+                        <label className={key.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Key *</label>
+                        <input type="text" className={formStyles.formControl} value={key.value} onChange={(e) => onChangeController("key", e.target.value)} />
+                        {key.error ? <small className={formStyles.formControlError}>{key.error}</small> : null}
+                    </div>
+
                     {/* Description */}
                     <div className={formStyles.formGroup}>
                         <label className={fa_description.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem in Farsi *</label>
@@ -293,14 +338,28 @@ export const ProjectForm = ({ params }) => {
                     </div>
                     {/* Logo */}
                     <div className={`${formStyles.formGroup} ${formStyles.formGroupHasButton}`}>
+                        <label className={formStyles.formLabel}>Light Logo</label>
                         {
-                            preview ?
-                                <Image width={100} height={100} className={formStyles.imagePreview} src={preview} alt="Preview" />
+                            lightPreview ?
+                                <Image width={100} height={100} className={formStyles.imagePreview} src={lightPreview} alt="Preview" />
                                 :
                                 <i className={formStyles.imagePreview}></i>
                         }
                         <label className={formStyles.formUpload}>
-                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onFileChanged} />
+                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onLightFileChanged} />
+                            <i className={formStyles.innerButton}>Upload</i>
+                        </label>
+                    </div>
+                    <div className={`${formStyles.formGroup} ${formStyles.formGroupHasButton}`}>
+                        <label className={formStyles.formLabel}>Dark Logo</label>
+                        {
+                            darkPreview ?
+                                <Image width={100} height={100} className={formStyles.imagePreview} src={darkPreview} alt="Preview" />
+                                :
+                                <i className={formStyles.imagePreview}></i>
+                        }
+                        <label className={formStyles.formUpload}>
+                            <input className={formStyles.formControl} type="file" accept="image/*" onChange={onDarkFileChanged} />
                             <i className={formStyles.innerButton}>Upload</i>
                         </label>
                     </div>
