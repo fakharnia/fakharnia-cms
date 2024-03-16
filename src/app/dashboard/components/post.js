@@ -37,8 +37,8 @@ export const PostComponent = () => {
     const postsListEl = posts.length !== 0 ? posts.map((post, index) => (
         <li className="flex-row flex-justify-between" key={"post" + index}>
             <div className={styles.info}>
-                <h5>{post.title}</h5>
-                <p>{post.createdAt} / {post.views?.length} / {post.estimateTime} min read</p>
+                <h5>{post.en_title}</h5>
+                <p>{post.createdAt} / {post.views?.length || 0} views / {post.estimateTime} min read</p>
                 <ul className="flex-row">
                     {post.tags.map((tag, index) => (
                         <li key={"tag" + index}>{tag}</li>
@@ -46,7 +46,7 @@ export const PostComponent = () => {
                 </ul>
             </div>
             <div className={styles.options}>
-                <Link   href={"/dashboard/posts/" + post._id}>Edit</Link>
+                <Link href={"/dashboard/posts/" + post._id}>Edit</Link>
                 <button onClick={() => { onDeletePost(post._id) }}>Delete</button>
             </div>
         </li>
