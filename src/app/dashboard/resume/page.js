@@ -256,10 +256,6 @@ const Resume = () => {
             result = false;
             setEn_aboutMe({ ...en_aboutMe, error: "About Me is required!" });
         }
-        if (!deu_aboutMe.value || deu_aboutMe.value.length === 0) {
-            result = false;
-            setDeu_aboutMe({ ...deu_aboutMe, error: "About Me is required!" });
-        }
 
         if (!fa_text.value || fa_text.value.length === 0) {
             result = false;
@@ -269,10 +265,6 @@ const Resume = () => {
             result = false;
             setEn_text({ ...en_text, error: "Text is required!" });
         }
-        if (!deu_text.value || deu_text.value.length === 0) {
-            result = false;
-            setDeu_text({ ...deu_text, error: "Text is required!" });
-        }
 
         if (!fa_education.value || fa_education.value.length === 0) {
             result = false;
@@ -281,10 +273,6 @@ const Resume = () => {
         if (!en_education.value || en_education.value.length === 0) {
             result = false;
             setEn_education({ ...en_education, error: "Education is required!" });
-        }
-        if (!deu_education.value || deu_education.value.length === 0) {
-            result = false;
-            setDeu_education({ ...deu_education, error: "Education is required!" });
         }
 
         if (!avatarUrl.value || avatarUrl.value.length === 0) {

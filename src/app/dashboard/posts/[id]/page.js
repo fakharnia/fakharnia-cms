@@ -143,10 +143,6 @@ export const Form = ({ params }) => {
             result = false;
             setEn_title({ ...en_title, error: "Title required!" });
         }
-        if (deu_title.value?.length === 0) {
-            result = false;
-            setDeu_title({ ...deu_title, error: "Title required!" });
-        }
         if (!fa_fileUrl.value) {
             result = false;
             setFa_fileUrl({ ...fa_fileUrl, error: "Upload Farsi version of post!" });
@@ -154,10 +150,6 @@ export const Form = ({ params }) => {
         if (!en_fileUrl.value) {
             result = false;
             setEn_fileUrl({ ...en_fileUrl, error: "Upload English version of post!" });
-        }
-        if (!deu_fileUrl.value) {
-            result = false;
-            setEn_fileUrl({ ...deu_fileUrl, error: "Upload German version of post!" });
         }
         if (!coverUrl.value) {
             result = false;

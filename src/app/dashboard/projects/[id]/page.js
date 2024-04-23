@@ -126,10 +126,6 @@ export const ProjectForm = ({ params }) => {
             setEn_name({ ...en_name, error: "Enter the project name" });
             result = false;
         }
-        if (deu_name.value.length === 0) {
-            setDeu_name({ ...deu_name, error: "Enter the project name" });
-            result = false;
-        }
         if (key.value.length === 0) {
             setKey({ ...key, error: "Enter the project key" });
             result = false;
@@ -142,10 +138,6 @@ export const ProjectForm = ({ params }) => {
             setEn_description({ ...en_description, error: "Enter the project Domain and Main Problem" });
             result = false;
         }
-        if (deu_description.value.length === 0) {
-            setDeu_description({ ...deu_description, error: "Enter the project Domain and Main Problem" });
-            result = false;
-        }
         if (fa_techDescription.value.length === 0) {
             setFa_techDescription({ ...fa_techDescription, error: "Enter the project Technologies Description" });
             result = false;
@@ -154,14 +146,9 @@ export const ProjectForm = ({ params }) => {
             setEn_techDescription({ ...en_techDescription, error: "Enter the project Technologies Description" });
             result = false;
         }
-        if (deu_techDescription.value.length === 0) {
-            setDeu_techDescription({ ...deu_techDescription, error: "Enter the project Technologies Description" });
-            result = false;
-        }
         if (lightLogoUrl.length === 0) {
             result = false;
         }
-        console.log(darkLogoUrl.length);
         if (darkLogoUrl.length === 0) {
             result = false;
         }

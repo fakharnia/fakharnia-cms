@@ -127,10 +127,6 @@ export const Form = ({ params }) => {
             result = false;
             setEn_title({ ...en_title, error: "Title required!" });
         }
-        if (deu_title.value?.length === 0) {
-            result = false;
-            setDeu_title({ ...deu_title, error: "Title required!" });
-        }
         if (priority.value === null) {
             result = false;
             setPriority({ ...priority, error: "Priority required!" });
@@ -142,10 +138,6 @@ export const Form = ({ params }) => {
         if (en_fileUrl.value?.length === 0) {
             result = false;
             setEn_fileUrl({ ...fa_fileUrl, error: "English Content required!" });
-        }
-        if (deu_fileUrl.value?.length === 0) {
-            result = false;
-            setDeu_fileUrl({ ...deu_fileUrl, error: "German Content required!" });
         }
 
         if (coverUrl.value?.length === 0) {
