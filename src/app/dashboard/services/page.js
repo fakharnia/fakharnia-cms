@@ -60,7 +60,7 @@ const Services = () => {
                         )
                     }
                 </ul>
-                {services.length === 0 ? <p className={componentStyles.noData}>There isn't any service yet!</p> : ""}
+                {services.length === 0 ? <p className={componentStyles.noData}>There isn&apos;t any service yet!</p> : ""}
             </div>
         </>
     )

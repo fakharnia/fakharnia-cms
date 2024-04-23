@@ -174,8 +174,8 @@ export const Form = ({ params }) => {
                     {innerForm ? <InnerForm onSubmit={onInnerFormSubmitted} /> : ''}
                     <div className={componentStyles.imagesList}>
                         {
-                            images.value.map(image => (
-                                <div className={componentStyles.imageEl}>
+                            images.value.map((image, index) => (
+                                <div key={index} className={componentStyles.imageEl}>
                                     <Image width={200} height={190} src={image.preview ?? `${previewURL}/design/${image?.fileUrl}`} alt={image.fileAlt}
                                         onClick={() => onDeleteImage(image)} />
                                     {image.isCover ? <i className={componentStyles.isCover}>This is cover</i> : ""}

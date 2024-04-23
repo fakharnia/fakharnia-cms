@@ -59,7 +59,7 @@ const Posts = () => {
                         )
                     }
                 </ul>
-                {posts.length === 0 ? <p className={componentStyles.noData}>There isn't any post yet!</p> : ""}
+                {posts.length === 0 ? <p className={componentStyles.noData}>There isn&apos;t any post yet!</p> : ""}
             </div>
         </>
     )

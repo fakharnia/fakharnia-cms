@@ -66,7 +66,7 @@ export const Projects = () => {
                         ))
                     }
                 </ul>
-                {projects.length === 0 ? <p className={componentStyles.noData}>There isn't any project yet!</p> : ""}
+                {projects.length === 0 ? <p className={componentStyles.noData}>There isn&apos;t any project yet!</p> : ""}
             </div>
         </>
     )
