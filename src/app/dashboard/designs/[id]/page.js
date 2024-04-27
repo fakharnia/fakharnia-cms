@@ -138,7 +138,7 @@ export const Form = ({ params }) => {
                         <small className={formStyles.formControlError}>{en_title.error}</small>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={deu_title.error ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Title *</label>
+                        <label className={deu_title.error ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Title</label>
                         <input type="text" className={formStyles.formControl} value={deu_title.value} onChange={(e) => setDeuTitle({ value: e.target.value, error: "" })} />
                         <small className={formStyles.formControlError}>{deu_title.error}</small>
                     </div>
@@ -161,7 +161,7 @@ export const Form = ({ params }) => {
                         <small className={formStyles.formControlError}>{en_description.error}</small>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={deu_description.error.length ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Description *</label>
+                        <label className={deu_description.error.length ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Description</label>
                         <textarea className={formStyles.formControl} value={deu_description.value} onChange={(e) => setDeuDescription({ value: e.target.value, error: "" })} ></textarea>
                         <small className={formStyles.formControlError}>{deu_description.error}</small>
                     </div>

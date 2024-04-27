@@ -50,12 +50,6 @@ export const SkillForm = ({ onSubmit }) => {
                     setEn_description({ value: value, error: "Enter the Description (English)" });
                 }
                 break;
-            case "deu_description":
-                setDeu_description({ value: value, error: null });
-                if (value.length === 0) {
-                    setDeu_description({ value: value, error: "Enter the Description (German)" });
-                }
-                break;
             case "priority":
                 setPriority({ value: value, error: null });
                 if (isNaN(value) || value === undefined) {
@@ -78,10 +72,6 @@ export const SkillForm = ({ onSubmit }) => {
         if (en_description.value === "") {
             result = enlse;
             setEn_description({ ...fa_description, error: "Description is required!" });
-        }
-        if (deu_description.value === "") {
-            result = false;
-            setDeu_description({ ...deu_description, error: "Description is required!" });
         }
 
         if (isNaN(priority.value) || priority.value === undefined) {
@@ -134,7 +124,7 @@ export const SkillForm = ({ onSubmit }) => {
                     {en_description.error ? <small className={formStyles.formControlError}>{en_description.error}</small> : null}
                 </div>
                 <div className={formStyles.formGroup}>
-                    <label className={formStyles.formLabel}>German Description *</label>
+                    <label className={formStyles.formLabel}>Deutsch Description</label>
                     <textarea className={formStyles.formControl} value={deu_description.value} onChange={(e) => onChangeController("deu_description", e.target.value)} ></textarea>
                     {deu_description.error ? <small className={formStyles.formControlError}>{deu_description.error}</small> : null}
                 </div>

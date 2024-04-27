@@ -132,7 +132,7 @@ const Status = () => {
                         <textarea className={formStyles.formControl} value={en_text} onChange={(e) => setEn_text(e.target.value)} ></textarea>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Daily Text (German)</label>
+                        <label className={formStyles.formLabel}>Daily Text (Deutsch)</label>
                         <textarea className={formStyles.formControl} value={deu_text} onChange={(e) => setDeu_text(e.target.value)} ></textarea>
                     </div>
                     <div className={formStyles.formGroup}>
@@ -144,7 +144,7 @@ const Status = () => {
                         <input type="text" className={formStyles.formControl} value={en_status} onChange={(e) => setEn_status(e.target.value)} />
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Status (German)</label>
+                        <label className={formStyles.formLabel}>Status (Deutsch)</label>
                         <input type="text" className={formStyles.formControl} value={deu_status} onChange={(e) => setDeu_status(e.target.value)} />
                     </div>
                     <div className={formStyles.formGroup}>

@@ -32,6 +32,7 @@ export const Form = ({ params }) => {
     const [fa_fileUrl, setFa_fileUrl] = useState({ value: "", error: "" });
     const [en_fileUrl, setEn_fileUrl] = useState({ value: "", error: "" });
     const [deu_fileUrl, setDeu_fileUrl] = useState({ value: "", error: "" });
+    const [estimateTimeInMinutes, setEstimateTimeInMinutes] = useState({ value: 0, errors: "" });
     const [tags, setTags] = useState({ value: [], error: "" });
     const [coverAlt, setCoverAlt] = useState("");
     const [preview, setPreview] = useState(null);
@@ -57,6 +58,7 @@ export const Form = ({ params }) => {
         setFa_fileUrl({ value: response?.fa_fileUrl, error: "" });
         setEn_fileUrl({ value: response?.en_fileUrl, error: "" });
         setDeu_fileUrl({ value: response?.deu_fileUrl, error: "" });
+        setEstimateTimeInMinutes({ value: response?.estimateTimeInMinutes, error: "" });
         setTags({ value: response?.tags, error: "" });
         setCoverAlt(response?.coverAlt);
         setPreview(response?.coverUrl ? `${previewURL}/post/${response._id}/${response?.coverUrl}` : "");
@@ -159,6 +161,10 @@ export const Form = ({ params }) => {
             result = false;
             setTags({ ...tags, error: "Tags required!" });
         }
+        if (estimateTimeInMinutes <= 0 || !estimateTimeInMinutes) {
+            result = false;
+            setEstimateTimeInMinutes({ estimateTimeInMinutes, error: "Enter Estimate Time" })
+        }
         return result;
     }
 
@@ -175,6 +181,7 @@ export const Form = ({ params }) => {
             form.append("fa_fileUrl", fa_fileUrl.value ?? null);
             form.append("en_fileUrl", en_fileUrl.value ?? null);
             form.append("deu_fileUrl", deu_fileUrl.value ?? null);
+            form.append("estimateTimeInMinutes", estimateTimeInMinutes.value ?? 0);
             form.append("coverAlt", coverAlt ?? null);
             form.append("coverChanged", coverChanged ? true : false);
             form.append("fa_fileChanged", fa_fileChanged ? true : false);
@@ -222,7 +229,7 @@ export const Form = ({ params }) => {
                         {en_title.error ? <small className={formStyles.formControlError}>{en_title.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>German Title *</label>
+                        <label className={formStyles.formLabel}>Deutsch Title</label>
                         <input type="text" className={formStyles.formControl} value={deu_title.value} onChange={(e) => setDeu_title({ value: e.target.value, error: "" })} />
                         {deu_title.error ? <small className={formStyles.formControlError}>{deu_title.error}</small> : null}
                     </div>
@@ -243,12 +250,16 @@ export const Form = ({ params }) => {
                         {en_fileUrl.error ? <small className={formStyles.formControlError}>{en_fileUrl.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.uploadLabel}>German version *</label>
+                        <label className={formStyles.uploadLabel}>Deutsch version</label>
                         <label className={`${formStyles.formUpload} ${formStyles.uploadNamed}`}>
                             <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onDeuFileChanged} />
                             <i className={formStyles.uploadText}>{deu_fileUrl.value ? deu_fileUrl.value : "No File Uploaded!"}</i>
                         </label>
                         {deu_fileUrl.error ? <small className={formStyles.formControlError}>{deu_fileUrl.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Estimate Time (minutes)</label>
+                        <input type="number" className={formStyles.formControl} value={estimateTimeInMinutes.value} onChange={(e) => setEstimateTimeInMinutes({ value: +e.target.value, error: "" })} />
                     </div>
                     <h5 className={formStyles.formSectionTitle}>Tags *</h5>
                     <button type="button" className={commonStyles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Tag" : "Add Tag"}</button>

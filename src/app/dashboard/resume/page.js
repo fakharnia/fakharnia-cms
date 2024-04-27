@@ -195,12 +195,6 @@ const Resume = () => {
                     setEn_aboutMe({ value: value, error: "Enter the About Me (English)" });
                 }
                 break;
-            case "deu_aboutMe":
-                setDeu_aboutMe({ value: value, error: null });
-                if (value.length === 0) {
-                    setDeu_aboutMe({ value: value, error: "Enter the About Me (German)" });
-                }
-                break;
             case "fa_text":
                 setFa_text({ value: value, error: null });
                 if (value.length === 0) {
@@ -214,10 +208,7 @@ const Resume = () => {
                 }
                 break;
             case "deu_text":
-                setDeu_text({ value: value, error: null });
-                if (value.length === 0) {
-                    setDeu_text({ value: value, error: "Enter the Text (German)" });
-                }
+                setEn_text({ value: value, error: null });
                 break;
             case "fa_education":
                 setFa_education({ value: value, error: null });
@@ -232,10 +223,7 @@ const Resume = () => {
                 }
                 break;
             case "deu_education":
-                setDeu_education({ value: value, error: null });
-                if (value.length === 0) {
-                    setDeu_education({ value: value, error: "Enter the Education (German)" });
-                }
+                setEn_education({ value: value, error: null });
                 break;
         }
     }
@@ -386,7 +374,7 @@ const Resume = () => {
                         {en_aboutMe.error ? <small className={formStyles.formControlError}>{en_aboutMe.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>About Me (German) *</label>
+                        <label className={formStyles.formLabel}>About Me (Deutsch)</label>
                         <textarea className={formStyles.formControl} value={deu_aboutMe.value} onChange={(e) => onChangeController("deu_aboutMe", e.target.value)} ></textarea>
                         {deu_aboutMe.error ? <small className={formStyles.formControlError}>{deu_aboutMe.error}</small> : null}
                     </div>
@@ -403,7 +391,7 @@ const Resume = () => {
                         {en_text.error ? <small className={formStyles.formControlError}>{en_text.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>German Text *</label>
+                        <label className={formStyles.formLabel}>Deutsch Text</label>
                         <textarea className={formStyles.formControl} value={deu_text.value} onChange={(e) => onChangeController("deu_text", e.target.value)} ></textarea>
                         {deu_text.error ? <small className={formStyles.formControlError}>{deu_text.error}</small> : null}
                     </div>
@@ -420,7 +408,7 @@ const Resume = () => {
                         {en_education.error ? <small className={formStyles.formControlError}>{en_education.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Education (German) *</label>
+                        <label className={formStyles.formLabel}>Education (Deutsch)</label>
                         <input type="text" className={formStyles.formControl} value={deu_education.value} onChange={(e) => onChangeController("deu_education", e.target.value)} />
                         {deu_education.error ? <small className={formStyles.formControlError}>{deu_education.error}</small> : null}
                     </div>
@@ -435,7 +423,7 @@ const Resume = () => {
                         <textarea className={formStyles.formControl} value={en_hobbies} onChange={(e) => setEn_hobbies(e.target.value)} ></textarea>
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>Hobbies (German)</label>
+                        <label className={formStyles.formLabel}>Hobbies (Deutsch)</label>
                         <textarea className={formStyles.formControl} value={deu_hobbies} onChange={(e) => setDeu_hobbies(e.target.value)} ></textarea>
                     </div>
 
