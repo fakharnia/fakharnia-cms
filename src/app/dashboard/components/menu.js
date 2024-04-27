@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from 'next-auth/react';
 
 import { useMenu } from "@/app/context/menuContext";
 
@@ -12,7 +13,6 @@ export const MenuComponent = () => {
     const { menu, changeMenu } = useMenu();
 
     const navigationItems = [
-        { path: '/dashboard/chats', label: 'Chats' },
         { path: '/dashboard/status', label: 'Status' },
         { path: '/dashboard/services', label: 'Services' },
         { path: '/dashboard/projects', label: 'Projects' },
@@ -25,6 +25,8 @@ export const MenuComponent = () => {
         changeMenu(path);
     }
 
+    const onSignOut = () => (signOut({ callbackUrl: '/' }));
+
     return (
         <>
             <div className={styles.menu}>
@@ -32,7 +34,7 @@ export const MenuComponent = () => {
                     <Image src="/logo.svg" alt="logo" width={0} height={0} onClick={() => navigate("/dashboard")} />
                 </Link>
 
-                <button type="button" className="cms-logout"></button>
+                <button type="button" className="cms-logout" onClick={() => { onSignOut() }}></button>
                 <ul>
                     {navigationItems.map((item) => (
                         <li key={item.path} className={menu === item.path ? styles.active : ''} >

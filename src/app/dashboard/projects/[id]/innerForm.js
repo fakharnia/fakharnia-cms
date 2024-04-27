@@ -46,7 +46,7 @@ export const InnerForm = ({ onSubmit }) => {
                 <textarea type="text" className={formStyles.formControl} value={en_description.value} onChange={(e) => setEn_description({ value: e.target.value, error: "" })}></textarea>
             </div>
             <div className={formStyles.formGroup}>
-                <label className={formStyles.formLabel}>German Description</label>
+                <label className={formStyles.formLabel}>Deutsch Description</label>
                 <textarea type="text" className={formStyles.formControl} value={deu_description.value} onChange={(e) => setDeu_description({ value: e.target.value, error: "" })}></textarea>
             </div>
 

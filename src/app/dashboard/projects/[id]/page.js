@@ -171,9 +171,6 @@ export const ProjectForm = ({ params }) => {
                 break;
             case "deu_name":
                 setDeu_name({ value: value, error: "" });
-                if (value.length === 0) {
-                    setDeu_name({ value: value, error: "Enter the project name (German)" });
-                }
                 break;
             case "key":
                 setKey({ value: value, error: "" });
@@ -195,9 +192,6 @@ export const ProjectForm = ({ params }) => {
                 break;
             case "deu_description":
                 setDeu_description({ value: value, error: "" });
-                if (value.length === 0) {
-                    setDeu_description({ value: value, error: "Enter the project Domain and Main Problem (German)" });
-                }
                 break;
 
             case "fa_techDescription":
@@ -214,9 +208,6 @@ export const ProjectForm = ({ params }) => {
                 break;
             case "deu_techDescription":
                 setDeu_techDescription({ value: value, error: "" });
-                if (value.length === 0) {
-                    setDeu_techDescription({ value: value, error: "Enter the project Technologies Description (Farsi)" });
-                }
                 break;
         }
     }
@@ -286,7 +277,7 @@ export const ProjectForm = ({ params }) => {
                         {en_name.error ? <small className={formStyles.formControlError}>{en_name.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={deu_name.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>German Name *</label>
+                        <label className={deu_name.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Deutsch Name</label>
                         <input type="text" className={formStyles.formControl} value={deu_name.value} onChange={(e) => onChangeController("deu_name", e.target.value)} />
                         {deu_name.error ? <small className={formStyles.formControlError}>{deu_name.error}</small> : null}
                     </div>
@@ -309,7 +300,7 @@ export const ProjectForm = ({ params }) => {
                         {en_description.error ? <small className={formStyles.formControlError}>{en_description.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={deu_description.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem in German *</label>
+                        <label className={deu_description.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>Domain and Main Problem in Deutsch</label>
                         <textarea className={formStyles.formControl} value={deu_description.value} onChange={(e) => onChangeController("deu_description", e.target.value)} ></textarea>
                         {deu_description.error ? <small className={formStyles.formControlError}>{deu_description.error}</small> : null}
                     </div>
@@ -369,7 +360,7 @@ export const ProjectForm = ({ params }) => {
                         {en_techDescription.error ? <small className={formStyles.formControlError}>{en_techDescription.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={deu_techDescription.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies (German) *</label>
+                        <label className={deu_techDescription.error.length > 0 ? formStyles.formLabelError : formStyles.formLabel}>About Technologies (Deutsch)</label>
                         <textarea className={formStyles.formControl} value={deu_techDescription.value} onChange={(e) => onChangeController("deu_techDescription", e.target.value)} ></textarea>
                         {deu_techDescription.error ? <small className={formStyles.formControlError}>{deu_techDescription.error}</small> : null}
                     </div>

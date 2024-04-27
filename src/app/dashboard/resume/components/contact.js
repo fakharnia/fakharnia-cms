@@ -7,23 +7,7 @@ export const ContactForm = ({ onSubmit }) => {
 
     const [link, setLink] = useState({ value: "", error: "" });
     const [priority, setPriority] = useState({ value: "", error: "" });
-    const [fileUrl, setFileUrl] = useState({ value: "", error: "" });
-    const [fileAlt, setFileAlt] = useState("");
-    const [preview, setPreview] = useState("");
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    const onFileChanged = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setSelectedFile(file);
-            setFileUrl({ value: file.name, error: "" });
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setPreview(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+    const [iconClass, setIconClass] = useState({ value: "", error: "" });
 
     const onChangeController = (propertyName, value) => {
         switch (propertyName) {
@@ -36,7 +20,13 @@ export const ContactForm = ({ onSubmit }) => {
             case "priority":
                 setPriority({ value: value, error: null });
                 if (isNaN(value) || value === undefined) {
-                    setPriority({ value: value, error: "Enter the Priority Rate" });
+                    setPriority({ value: value, error: "Enter the Priority" });
+                }
+                break;
+            case "iconClass":
+                setIconClass({ value: value, error: null });
+                if (!value) {
+                    setIconClass({ value: value, error: "Enter the Icon Class" });
                 }
                 break;
         }
@@ -52,6 +42,10 @@ export const ContactForm = ({ onSubmit }) => {
             result = false;
             setPriority({ ...readingRate, error: "Priority is required!" });
         }
+        if (iconClass.value === null || !iconClass.value) {
+            result = false;
+            setIconClass({ ...iconClass, error: "Icon Class is required!" });
+        }
         return result;
     }
 
@@ -63,10 +57,7 @@ export const ContactForm = ({ onSubmit }) => {
                 _id: null,
                 link: link.value,
                 priority: priority.value,
-                fileUrl: fileUrl.value,
-                file: selectedFile,
-                fileAlt: fileAlt,
-                preview: preview
+                iconClass: iconClass.value
             }
             onSubmit(data);
         }
@@ -88,23 +79,12 @@ export const ContactForm = ({ onSubmit }) => {
                     <input type="number" min={1} max={5} className={formStyles.formControl} value={priority.value} onChange={(e) => onChangeController("priority", e.target.value)} />
                     {priority.error ? <small className={formStyles.formControlError}>{priority.error}</small> : null}
                 </div>
-                <div className={`${formStyles.formGroup} ${formStyles.formGroupHasButton}`}>
-                    <label className={formStyles.formLabel}>Icon</label>
-                    {
-                        preview ?
-                            <Image width={100} height={100} className={formStyles.imagePreview} src={preview} alt="Preview" />
-                            :
-                            <i className={formStyles.imagePreview}></i>
-                    }
-                    <label className={formStyles.formUpload}>
-                        <input className={formStyles.formControl} type="file" accept="image/*" onChange={onFileChanged} />
-                        <i className={formStyles.innerButton}>Upload</i>
-                    </label>
-                </div>
                 <div className={formStyles.formGroup}>
-                    <label className={formStyles.formLabel}>Icon Alt</label>
-                    <input type="text" className={formStyles.formControl} value={fileAlt} onChange={(e) => setFileAlt(e.target.value)} />
+                    <label className={formStyles.formLabel}>Icon Class *</label>
+                    <input type="text" className={formStyles.formControl} value={iconClass.value} onChange={(e) => onChangeController("iconClass", e.target.value)} />
+                    {iconClass.error ? <small className={formStyles.formControlError}>{iconClass.error}</small> : null}
                 </div>
+
                 <div className={formStyles.formButtons}>
                     <button type="button" className={formStyles.submitInnerButton} onClick={submitForm}>Add</button>
                 </div>

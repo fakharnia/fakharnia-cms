@@ -209,7 +209,7 @@ export const Form = ({ params }) => {
                         {en_title.error ? <small className={formStyles.formControlError}>{en_title.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.formLabel}>German Title *</label>
+                        <label className={formStyles.formLabel}>Deutsch Title</label>
                         <input type="text" className={formStyles.formControl} value={deu_title.value} onChange={(e) => setDeu_title({ value: e.target.value, error: "" })} />
                         {deu_title.error ? <small className={formStyles.formControlError}>{deu_title.error}</small> : null}
                     </div>
@@ -230,7 +230,7 @@ export const Form = ({ params }) => {
                         {en_fileUrl.error ? <small className={formStyles.formControlError}>{en_fileUrl.error}</small> : null}
                     </div>
                     <div className={formStyles.formGroup}>
-                        <label className={formStyles.uploadLabel}>German Content *</label>
+                        <label className={formStyles.uploadLabel}>Deutsch Content</label>
                         <label className={`${formStyles.formUpload} ${formStyles.uploadNamed}`}>
                             <input className={formStyles.formControl} type="file" accept=".mdx" onChange={onDeuFileChanged} />
                             <i className={formStyles.uploadText}>{deu_fileUrl.value ? deu_fileUrl.value : "No File Uploaded!"}</i>
