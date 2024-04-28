@@ -34,6 +34,7 @@ export const SkillForm = ({ onSubmit }) => {
                     setTitle({ value: value, error: "Enter the Title" });
                 }
                 break;
+
             case "priority":
                 setPriority({ value: value, error: null });
                 if (isNaN(value) || value === undefined) {
@@ -49,6 +50,7 @@ export const SkillForm = ({ onSubmit }) => {
             result = false;
             setTitle({ ...title, error: "Title is required!" });
         }
+
         if (isNaN(priority.value) || priority.value === undefined) {
             result = false;
             setPriority({ ...readingRate, error: "Priority is required!" });
@@ -86,6 +88,7 @@ export const SkillForm = ({ onSubmit }) => {
                     {title.error ? <small className={formStyles.formControlError}>{title.error}</small> : null}
                 </div>
                 <div className={formStyles.formGroup}>
+
                     <label className={formStyles.formLabel}>Priority *</label>
                     <input type="number" min={1} max={5} className={formStyles.formControl} value={priority.value} onChange={(e) => onChangeController("priority", e.target.value)} />
                     {priority.error ? <small className={formStyles.formControlError}>{priority.error}</small> : null}

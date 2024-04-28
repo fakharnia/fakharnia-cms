@@ -152,6 +152,9 @@ const Resume = () => {
                     setEn_aboutMe({ value: value, error: "Enter the About Me (English)" });
                 }
                 break;
+            case "deu_aboutMe":
+                setEn_aboutMe({ value: value, error: null });
+                break;
             case "fa_text":
                 setFa_text({ value: value, error: null });
                 if (value.length === 0) {
@@ -337,6 +340,7 @@ const Resume = () => {
                         <textarea className={formStyles.formControl} value={deu_text.value} onChange={(e) => onChangeController("deu_text", e.target.value)} ></textarea>
                         {deu_text.error ? <small className={formStyles.formControlError}>{deu_text.error}</small> : null}
                     </div>
+
 
                     <h5 className={formStyles.formSectionTitle}>Skills</h5>
                     <button type="button" className={commonStyles.pageAddButton} onClick={() => { skillForm ? setSkillForm(false) : setSkillForm(true) }} >{skillForm ? "Cancel Skill" : "Add Skill"}</button>
