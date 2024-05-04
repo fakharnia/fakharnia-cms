@@ -153,7 +153,7 @@ const Resume = () => {
                 }
                 break;
             case "deu_aboutMe":
-                setEn_aboutMe({ value: value, error: null });
+                setDeu_aboutMe({ value: value, error: null });
                 break;
             case "fa_text":
                 setFa_text({ value: value, error: null });
@@ -168,7 +168,7 @@ const Resume = () => {
                 }
                 break;
             case "deu_text":
-                setEn_text({ value: value, error: null });
+                setDeu_text({ value: value, error: null });
                 break;
         }
     }
