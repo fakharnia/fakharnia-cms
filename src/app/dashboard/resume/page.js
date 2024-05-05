@@ -175,7 +175,6 @@ const Resume = () => {
 
     const formValidation = () => {
         var result = true;
-
         if (!fileUrl.value || fileUrl.value.length === 0) {
             result = false;
             setFileUrl({ ...fileUrl, error: "Resume File is required!" });
@@ -201,7 +200,7 @@ const Resume = () => {
 
         if (!avatarUrl.value || avatarUrl.value.length === 0) {
             result = false;
-            setFileUrl({ ...avatarUrl, error: "Avatar is required!" });
+            setAvatarUrl({ ...avatarUrl, error: "Avatar is required!" });
         }
 
         return result;
