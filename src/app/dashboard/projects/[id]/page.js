@@ -46,6 +46,12 @@ export const ProjectForm = ({ params }) => {
     const [selectedLightFile, setSelectedLightFile] = useState(null);
     const [selectedDarkFile, setSelectedDarkFile] = useState(null);
 
+    const [fa_metatagTitle, setFa_metatagTitle] = useState({ value: "", error: "" });
+    const [en_metatagTitle, setEn_metatagTitle] = useState({ value: "", error: "" });
+    const [fa_metatagDescription, setFa_metatagDescription] = useState({ value: "", error: "" });
+    const [en_metatagDescription, setEn_metatagDescription] = useState({ value: "", error: "" });
+
+
     const fetchProject = async () => {
         const response = await getProject(params.id);;
         setMode(response?._id ? "edit" : "create");
@@ -72,6 +78,12 @@ export const ProjectForm = ({ params }) => {
         setDarkPreview(response?.darkLogoUrl ? `${previewURL}/project/${response?.darkLogoUrl}` : null);
         setSelectedLightFile(null);
         setSelectedDarkFile(null);
+
+        setFa_metatagTitle({ value: response?.fa_metatag_title, error: "" });
+        setEn_metatagTitle({ value: response?.en_metatag_title, error: "" });
+        setFa_metatagDescription({ value: response?.fa_metatag_description, error: "" });
+        setEn_metatagDescription({ value: response?.en_metatag_description, error: "" });
+
     }
 
     useEffect(() => {
@@ -152,6 +164,23 @@ export const ProjectForm = ({ params }) => {
         if (darkLogoUrl.length === 0) {
             result = false;
         }
+        if (!fa_metatagTitle.value || fa_metatagTitle.value.length === 0) {
+            result = false;
+            setFa_metatagTitle({ ...fa_metatagTitle, error: "Farsi Metatag Title required!" });
+        }
+        if (!en_metatagTitle.value || en_metatagTitle.value.length === 0) {
+            result = false;
+            setEn_metatagTitle({ ...en_metatagTitle, error: "English Metatag Title required!" });
+        }
+        if (!fa_metatagDescription.value || fa_metatagDescription.value.length === 0) {
+            result = false;
+            setFa_metatagDescription({ ...fa_metatagDescription, error: "Farsi Metatag Description required!" });
+        }
+        if (!en_metatagDescription.value || en_metatagDescription.value.length === 0) {
+            result = false;
+            setEn_metatagDescription({ ...en_metatagDescription, error: "English Metatag Description required!" });
+        }
+
         return result;
     }
 
@@ -209,6 +238,18 @@ export const ProjectForm = ({ params }) => {
             case "deu_techDescription":
                 setDeu_techDescription({ value: value, error: "" });
                 break;
+            case "fa_metatagTitle":
+                setFa_metatagTitle({ value: value, error: "" });
+                break;
+            case "en_metatagTitle":
+                setEn_metatagTitle({ value: value, error: "" });
+                break;
+            case "fa_metatagDescription":
+                setFa_metatagDescription({ value: value, error: "" });
+                break;
+            case "en_metatagDescription":
+                setEn_metatagDescription({ value: value, error: "" });
+                break;
         }
     }
 
@@ -238,6 +279,12 @@ export const ProjectForm = ({ params }) => {
             form.append('darkLogo', selectedDarkFile ?? null);
             form.append("lightLogoChanged", selectedLightFile ? true : false);
             form.append("darkLogoChanged", selectedDarkFile ? true : false);
+
+            form.append("fa_metatag_title", fa_metatagTitle.value);
+            form.append("en_metatag_title", en_metatagTitle.value);
+            form.append("fa_metatag_description", fa_metatagDescription.value);
+            form.append("en_metatag_description", en_metatagDescription.value);
+
 
             try {
                 const result = mode === "create" ? await createAction(form) : await updateAction(form);
@@ -371,6 +418,26 @@ export const ProjectForm = ({ params }) => {
                     </ul>
                     <button type="button" className={commonStyles.pageAddButton} onClick={() => { innerForm ? setInnerForm(false) : setInnerForm(true) }} >{innerForm ? "Cancel Tech" : "Add Tech"}</button>
                     {innerForm ? <InnerForm onSubmit={onInnerFormSubmitted} /> : ''}
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Persian Metatag Title *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_metatagTitle.value} onChange={(e) => setFa_metatagTitle({ value: e.target.value, error: "" })} />
+                        {fa_metatagTitle.error ? <small className={formStyles.formControlError}>{fa_metatagTitle.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>English Metatag Title *</label>
+                        <input type="text" className={formStyles.formControl} value={en_metatagTitle.value} onChange={(e) => setEn_metatagTitle({ value: e.target.value, error: "" })} />
+                        {en_metatagTitle.error ? <small className={formStyles.formControlError}>{en_metatagTitle.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Persian Metatag Description *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_metatagDescription.value} onChange={(e) => setFa_metatagDescription({ value: e.target.value, error: "" })} />
+                        {fa_metatagDescription.error ? <small className={formStyles.formControlError}>{fa_metatagDescription.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>English Metatag Description *</label>
+                        <input type="text" className={formStyles.formControl} value={en_metatagDescription.value} onChange={(e) => setEn_metatagDescription({ value: e.target.value, error: "" })} />
+                        {en_metatagDescription.error ? <small className={formStyles.formControlError}>{en_metatagDescription.error}</small> : null}
+                    </div>
                     <div className={formStyles.formButtons}>
                         <button type="submit" className={formStyles.submitButton}>Save Changes</button>
                     </div>

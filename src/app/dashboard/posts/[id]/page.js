@@ -46,6 +46,11 @@ export const Form = ({ params }) => {
     const [en_fileChanged, setEn_fileChanged] = useState(false);
     const [deu_fileChanged, setDeu_fileChanged] = useState(false);
 
+    const [fa_metatagTitle, setFa_metatagTitle] = useState({ value: "", error: "" });
+    const [en_metatagTitle, setEn_metatagTitle] = useState({ value: "", error: "" });
+    const [fa_metatagDescription, setFa_metatagDescription] = useState({ value: "", error: "" });
+    const [en_metatagDescription, setEn_metatagDescription] = useState({ value: "", error: "" });
+
 
     const fetchService = async () => {
         const response = await getAction(params.id);
@@ -63,6 +68,11 @@ export const Form = ({ params }) => {
         setCoverAlt(response?.coverAlt);
         setPreview(response?.coverUrl ? `${previewURL}/post/${response._id}/${response?.coverUrl}` : "");
         setMode(response?._id ? "edit" : "create");
+
+        setFa_metatagTitle({ value: response?.fa_metatag_title, error: "" });
+        setEn_metatagTitle({ value: response?.en_metatag_title, error: "" });
+        setFa_metatagDescription({ value: response?.fa_metatag_description, error: "" });
+        setEn_metatagDescription({ value: response?.en_metatag_description, error: "" });
     }
 
     useEffect(() => {
@@ -165,6 +175,22 @@ export const Form = ({ params }) => {
             result = false;
             setEstimateTimeInMinutes({ estimateTimeInMinutes, error: "Enter Estimate Time" })
         }
+        if (!fa_metatagTitle.value || fa_metatagTitle.value.length === 0) {
+            result = false;
+            setFa_metatagTitle({ ...fa_metatagTitle, error: "Farsi Metatag Title required!" });
+        }
+        if (!en_metatagTitle.value || en_metatagTitle.value.length === 0) {
+            result = false;
+            setEn_metatagTitle({ ...en_metatagTitle, error: "English Metatag Title required!" });
+        }
+        if (!fa_metatagDescription.value || fa_metatagDescription.value.length === 0) {
+            result = false;
+            setFa_metatagDescription({ ...fa_metatagDescription, error: "Farsi Metatag Description required!" });
+        }
+        if (!en_metatagDescription.value || en_metatagDescription.value.length === 0) {
+            result = false;
+            setEn_metatagDescription({ ...en_metatagDescription, error: "English Metatag Description required!" });
+        }
         return result;
     }
 
@@ -191,6 +217,11 @@ export const Form = ({ params }) => {
             form.append("fa_file", fa_file);
             form.append("en_file", en_file);
             form.append("deu_file", deu_file);
+            
+            form.append("fa_metatag_title", fa_metatagTitle.value);
+            form.append("en_metatag_title", en_metatagTitle.value);
+            form.append("fa_metatag_description", fa_metatagDescription.value);
+            form.append("en_metatag_description", en_metatagDescription.value);
 
             try {
                 const result = mode === "create" ? await createAction(form) : await updateAction(form);
@@ -290,6 +321,26 @@ export const Form = ({ params }) => {
                         <input type="text" className={formStyles.formControl} value={coverAlt} onChange={(e) => setCoverAlt(e.target.value)} />
                     </div>
 
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Persian Metatag Title *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_metatagTitle.value} onChange={(e) => setFa_metatagTitle({ value: e.target.value, error: "" })} />
+                        {fa_metatagTitle.error ? <small className={formStyles.formControlError}>{fa_metatagTitle.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>English Metatag Title *</label>
+                        <input type="text" className={formStyles.formControl} value={en_metatagTitle.value} onChange={(e) => setEn_metatagTitle({ value: e.target.value, error: "" })} />
+                        {en_metatagTitle.error ? <small className={formStyles.formControlError}>{en_metatagTitle.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Persian Metatag Description *</label>
+                        <input type="text" className={formStyles.formControl} value={fa_metatagDescription.value} onChange={(e) => setFa_metatagDescription({ value: e.target.value, error: "" })} />
+                        {fa_metatagDescription.error ? <small className={formStyles.formControlError}>{fa_metatagDescription.error}</small> : null}
+                    </div>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>English Metatag Description *</label>
+                        <input type="text" className={formStyles.formControl} value={en_metatagDescription.value} onChange={(e) => setEn_metatagDescription({ value: e.target.value, error: "" })} />
+                        {en_metatagDescription.error ? <small className={formStyles.formControlError}>{en_metatagDescription.error}</small> : null}
+                    </div>
                     <div className={formStyles.formButtons}>
                         <button type="submit" className={formStyles.submitButton}>Save Changes</button>
                     </div>
