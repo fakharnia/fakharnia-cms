@@ -25,6 +25,7 @@ export const Form = ({ params }) => {
 
     // Form properties
     const [_id, setId] = useState();
+    const [key, setKey] = useState({ value: "", error: "" });
     const [fa_title, setFa_title] = useState({ value: "", error: "" });
     const [en_title, setEn_title] = useState({ value: "", error: "" });
     const [deu_title, setDeu_title] = useState({ value: "", error: "" });
@@ -56,6 +57,7 @@ export const Form = ({ params }) => {
         const response = await getAction(params.id);
 
         setId(response._id);
+        setKey({ value: response?.key, error: "" });
         setFa_title({ value: response?.fa_title, error: "" });
         setEn_title({ value: response?.en_title, error: "" });
         setDeu_title({ value: response?.deu_title, error: "" });
@@ -147,6 +149,10 @@ export const Form = ({ params }) => {
 
     const formValidation = () => {
         let result = true;
+        if (key.value?.length === 0) {
+            result = false;
+            setFa_itle({ ...key, error: "Key required!" });
+        }
         if (fa_title.value?.length === 0) {
             result = false;
             setFa_itle({ ...fa_title, error: "Title required!" });
@@ -199,6 +205,7 @@ export const Form = ({ params }) => {
         if (formValidation()) {
             const form = new FormData();
             form.append("_id", _id ?? null);
+            form.append("key", key.value ?? null);
             form.append("fa_title", fa_title.value ?? null);
             form.append("en_title", en_title.value ?? null);
             form.append("deu_title", deu_title.value ?? null);
@@ -217,7 +224,7 @@ export const Form = ({ params }) => {
             form.append("fa_file", fa_file);
             form.append("en_file", en_file);
             form.append("deu_file", deu_file);
-            
+
             form.append("fa_metatag_title", fa_metatagTitle.value);
             form.append("en_metatag_title", en_metatagTitle.value);
             form.append("fa_metatag_description", fa_metatagDescription.value);
@@ -249,6 +256,11 @@ export const Form = ({ params }) => {
                     <Link className={commonStyles.pageAddButton} href="/dashboard/posts">Back</Link>
                 </div>
                 <form className={formStyles.form} onSubmit={submitForm}>
+                    <div className={formStyles.formGroup}>
+                        <label className={formStyles.formLabel}>Key *</label>
+                        <input type="text" className={formStyles.formControl} value={key.value} onChange={(e) => setKey({ value: e.target.value, error: "" })} />
+                        {key.error ? <small className={formStyles.formControlError}>{key.error}</small> : null}
+                    </div>
                     <div className={formStyles.formGroup}>
                         <label className={formStyles.formLabel}>Persian Title *</label>
                         <input type="text" className={formStyles.formControl} value={fa_title.value} onChange={(e) => setFa_title({ value: e.target.value, error: "" })} />
